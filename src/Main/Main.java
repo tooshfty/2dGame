@@ -5,8 +5,6 @@ import javax.swing.*;
 public class Main {
 
     public static void main (String[] args){
-        String steezey;
-
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
