@@ -23,6 +23,7 @@ public class UI {
     public UI(GamePanel gp){
         this.gp = gp;
 
+
         arial_40 = new Font("Arial",Font.PLAIN, 40);
         arial_80B = new Font("Arial",Font.BOLD, 80);
 
