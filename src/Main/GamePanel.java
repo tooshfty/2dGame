@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
 
     //System
-    KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH = new KeyHandler(this);
     TileManager tileM = new TileManager(this);
     Sound music = new Sound();
     Sound se = new Sound();
@@ -46,8 +46,12 @@ public class GamePanel extends JPanel implements Runnable{
 
     //GAMESTATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
+
+    //
 
 
 
@@ -66,8 +70,8 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setObject();
         aSetter.setNPC();
 
-        playMusic(0);
-        gameState = playState;
+        //playMusic(0);
+        gameState = titleState;
     }
 
     public void startGameThread(){
@@ -131,26 +135,34 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
 
-        //tile
-        tileM.draw(g2);
-        //object
-        for (int i = 0; i < obj.length; i++){
-            if (obj[i] != null){
-                obj[i].draw(g2,this);
-            }
+        //Title screen
+        if (gameState == titleState){
+
+            ui.draw(g2);
         }
-
-        //NPC
-        for (int i = 0; i< npc.length; i++){
-            if (npc[i]!= null){
-                npc[i].draw(g2);
+        //other
+        else {
+            //tile
+            tileM.draw(g2);
+            //object
+            for (int i = 0; i < obj.length; i++){
+                if (obj[i] != null){
+                    obj[i].draw(g2,this);
+                }
             }
 
-        }
-        //player
-        player.draw(g2);
+            //NPC
+            for (int i = 0; i< npc.length; i++){
+                if (npc[i]!= null){
+                    npc[i].draw(g2);
+                }
 
-        ui.draw(g2);
+            }
+            //player
+            player.draw(g2);
+
+            ui.draw(g2);
+        }
 
         //Debug
         if (keyH.checkDrawTime){

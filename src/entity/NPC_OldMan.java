@@ -16,6 +16,7 @@ public class NPC_OldMan extends Entity{
         direction = "down";
         speed = 1;
         getImage();
+        setDialogue();
     }
     public void getImage(){
 
@@ -27,6 +28,16 @@ public class NPC_OldMan extends Entity{
         left2 = setup("/NPC/oldman_left_2");
         right1 = setup("/NPC/oldman_right_1");
         right2 = setup("/NPC/oldman_right_2");
+    }
+
+    public void setDialogue() {
+
+        dialogues[0] = "Howdy";
+        dialogues[1] = "Howdy1";
+        dialogues[2] = "Howdy2 ";
+        dialogues[3] = "Howdy3";
+        dialogues[4] = "Howdy4";
+
     }
 
     public void setAction(){
@@ -51,6 +62,12 @@ public class NPC_OldMan extends Entity{
             actionLockCounter = 0;
         }
 
+    }
+
+    public void speak() {
+
+        //character specific dialogue
+        super.speak();
     }
 
 }
