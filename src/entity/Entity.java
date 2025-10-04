@@ -15,22 +15,34 @@ public class Entity {
     public int speed;
 
 
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
+    public BufferedImage up1, up2, down1, down2,
+            left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1,
+            attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    public String direction = "down";
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
     public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter = 0;
-    String dialogues[] = new String[20];
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
+    String[] dialogues = new String[20];
     int dialogueIndex = 0;
 
     //Character status
     public int maxLife;
     public int life;
+
+    public BufferedImage image, image2, image3;
+    public String name;
+    public boolean collision = false;
+    public int type; // 0 = player, 1 = npc, 2 = monster
+    boolean attacking = false;
 
     public Entity(GamePanel gp){
 
@@ -69,7 +81,16 @@ public class Entity {
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this,false);
-        gp.cChecker.checkPlayer(this);
+        gp.cChecker.checkEntity(this,gp.npc);
+        gp.cChecker.checkEntity(this,gp.monster);
+        boolean contactPlayer = gp.cChecker.checkPlayer(this);
+
+        if (this.type == 2 && contactPlayer) {
+            if (!gp.player.invincible){
+                gp.player.life -= 1;
+                gp.player.invincible = true;
+            }
+        }
         if (!collisionOn) {
 
             switch (direction) {
@@ -97,6 +118,14 @@ public class Entity {
                 spriteNum = 1;
             }
             spriteCounter = 0;
+        }
+
+        if (invincible) {
+            invincibleCounter++;
+            if (invincibleCounter > 40) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
         }
     }
 
@@ -145,19 +174,30 @@ public class Entity {
                     break;
             }
 
+            //set monster transparency when damaged
+            if (invincible) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            }
+
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+            //reset transparency
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            //2 lines below draws a hitbox for non player entity
+            g2.setColor(Color.red);
+            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
         }
     }
 
 
-    public BufferedImage setup(String imagePath){
+    public BufferedImage setup(String imagePath, int width, int height){
 
         UtilityTool utool = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-            image = utool.scaleImage(image,  gp.tileSize, gp.tileSize);
+            image = utool.scaleImage(image,  width, height);
 
         }catch (IOException e){
             e.printStackTrace();

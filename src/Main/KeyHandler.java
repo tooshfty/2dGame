@@ -93,7 +93,7 @@ public class KeyHandler implements KeyListener {
 
 
         //play state
-        if (gp.gameState == gp.playState){
+        else if (gp.gameState == gp.playState){
             if (code==KeyEvent.VK_W){
                 upPressed = true;
             }
@@ -108,6 +108,7 @@ public class KeyHandler implements KeyListener {
             }
             if (code==KeyEvent.VK_P){
                 gp.gameState = gp.pauseState;
+                System.out.println("pause pressed");
             }
             if (code == KeyEvent.VK_ENTER){
                 enterPressed = true;
