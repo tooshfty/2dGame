@@ -76,18 +76,19 @@ public class UI {
         }
         //Pause state
         if (gp.gameState == gp.pauseState) {
-            //pause state
             drawPlayerLife();
             drawPauseScreen();
 
         }
-
         //Dialogue State
         if (gp.gameState == gp.dialogueState){
             drawPlayerLife();
             drawDialogueState();
         }
-
+        //Character State
+        if (gp.gameState == gp.characterState) {
+            drawCharacterScreen();
+        }
     }
 
     public void drawDialogueState() {
@@ -108,6 +109,16 @@ public class UI {
             g2.drawString(line, x ,y);
             y += 40;
         }
+
+    }
+    public void drawCharacterScreen() {
+
+        //create frame
+        final int frameX = gp.tileSize * 2;
+        final int frameY = gp.tileSize;
+        final int frameWidth = gp.tileSize * 5;
+        final int frameHeight = gp.tileSize * 10;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
     }
 
