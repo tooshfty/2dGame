@@ -32,13 +32,13 @@ public class KeyHandler implements KeyListener {
             playState(code);
         }
         //debug
-        if (code==KeyEvent.VK_T){
-            if (!checkDrawTime){
-                checkDrawTime = true;
-            } else {
-                checkDrawTime = false;
-            }
-        }
+//        if (code==KeyEvent.VK_T){
+//            if (!checkDrawTime){
+//                checkDrawTime = true;
+//            } else {
+//                checkDrawTime = false;
+//            }
+//        }
         //pause state
         else if (gp.gameState == gp.pauseState){
             pauseState(code);
