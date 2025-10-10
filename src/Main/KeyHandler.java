@@ -2,13 +2,14 @@ package Main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Key;
 
 public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
     GamePanel gp;
     //Debug
-    boolean checkDrawTime = false;
+    boolean showDebugText = false;
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -31,14 +32,7 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.playState){
             playState(code);
         }
-        //debug
-//        if (code==KeyEvent.VK_T){
-//            if (!checkDrawTime){
-//                checkDrawTime = true;
-//            } else {
-//                checkDrawTime = false;
-//            }
-//        }
+
         //pause state
         else if (gp.gameState == gp.pauseState){
             pauseState(code);
@@ -51,18 +45,32 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.characterState) {
             characterState(code);
         }
+
+        //debug
+        if (code==KeyEvent.VK_T){
+            if (!showDebugText){
+                showDebugText = true;
+            } else {
+                showDebugText = false;
+            }
+        }
+        if (code == KeyEvent.VK_R){
+            gp.tileM.loadMap("/maps/worldV2.txt");
+        }
     }
 
     public void titleState(int code){
 
         if (gp.ui.titleScreenState == 0){
             if (code==KeyEvent.VK_W){
+                gp.playSE(9);
                 gp.ui.commandNum--;
                 if (gp.ui.commandNum<0){
                     gp.ui.commandNum = 2;
                 }
             }
             if (code==KeyEvent.VK_S){
+                gp.playSE(9);
                 gp.ui.commandNum++;
                 if (gp.ui.commandNum > 2){
                     gp.ui.commandNum = 0;
@@ -84,12 +92,14 @@ public class KeyHandler implements KeyListener {
             }
         } else if (gp.ui.titleScreenState == 1){
             if (code==KeyEvent.VK_W){
+                gp.playSE(9);
                 gp.ui.commandNum--;
                 if (gp.ui.commandNum<0){
                     gp.ui.commandNum = 3;
                 }
             }
             if (code==KeyEvent.VK_S){
+                gp.playSE(9);
                 gp.ui.commandNum++;
                 if (gp.ui.commandNum > 3){
                     gp.ui.commandNum = 0;
@@ -156,10 +166,33 @@ public class KeyHandler implements KeyListener {
         }
     }
     public void characterState(int code){
-        System.out.println("cState called");
+
         if (code == KeyEvent.VK_C) {
-            System.out.println("c pressed");
             gp.gameState = gp.playState;
+        }
+        if (code == KeyEvent.VK_W) {
+            if (gp.ui.slotRow != 0) {
+                gp.ui.slotRow--;
+                gp.playSE(9);
+            }
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gp.ui.slotCol != 0){
+                gp.ui.slotCol--;
+                gp.playSE(9);
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gp.ui.slotRow != 3){
+                gp.ui.slotRow++;
+                gp.playSE(9);
+            }
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gp.ui.slotCol != 4){
+                gp.ui.slotCol++;
+                gp.playSE(9);
+            }
         }
     }
 

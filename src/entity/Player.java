@@ -3,6 +3,7 @@ package entity;
 import Main.GamePanel;
 import Main.KeyHandler;
 import Main.UtilityTool;
+import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
@@ -10,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Player extends Entity{
 
@@ -20,6 +22,8 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCancel = false;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int inventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -69,6 +73,20 @@ public class Player extends Entity{
         currentShield = new OBJ_Shield_Wood(gp);
         attack = getAttack();
         defense = getDefense();
+        setItems();
+    }
+
+    public void setItems() {
+
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+
     }
 
     public int getAttack(){
@@ -292,7 +310,11 @@ public class Player extends Entity{
         if (i != 999) {
             if (!invincible) {
                 gp.playSE(6);
-                life -= 1;
+                int damage = gp.monster[i].attack - defense;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                life -= damage;
                 invincible = true;
             }
         }
@@ -303,15 +325,40 @@ public class Player extends Entity{
             if (!gp.monster[i].invincible){
 
                 gp.playSE(5);
-                gp.monster[i].life -= 1;
+                int damage = attack - gp.monster[i].defense;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                gp.monster[i].life -= damage;
+
+                gp.ui.addMessage(damage + " damage");
                 gp.monster[i].invincible = true;
                 gp.monster[i].damageReaction();
 
                 if (gp.monster[i].life <= 0) {
                     gp.monster[i].dying = true;
+                    gp.ui.addMessage("killed the " + gp.monster[i].name + "!");
+                    gp.ui.addMessage("exp + " + gp.monster[i].exp + "!");
+                    exp += gp.monster[i].exp;
+                    checkLevelUp();
                 }
             }
 
+        }
+    }
+    public void checkLevelUp() {
+        if (exp >= nextLevelExp){
+            level++;
+            nextLevelExp = nextLevelExp * 2;
+            maxLife += 2;
+            strength++;
+            dexterity++;
+            attack = getAttack();
+            defense = getDefense();
+
+            gp.playSE(8);
+            gp.gameState = gp.dialogueState;
+            gp.ui.currentDialogue = "You are level " + level + " now\n";
         }
     }
 
@@ -415,9 +462,9 @@ public class Player extends Entity{
         g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
         //uncomment to see player invincibility timer
-        g2.setFont(new Font("Arial", Font.PLAIN, 26));
-        g2.setColor(Color.white);
-        g2.drawString("Invincible: " + invincibleCounter, 10, 400);
+        //g2.setFont(new Font("Arial", Font.PLAIN, 26));
+        //g2.setColor(Color.white);
+        //g2.drawString("Invincible: " + invincibleCounter, 10, 400);
     }
 
 
