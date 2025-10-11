@@ -3,6 +3,7 @@ package Main;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
+import tile_interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +48,9 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[] obj = new Entity[20];
     public Entity[] npc = new Entity[10];
     public Entity[] monster = new Entity[20];
+    public InteractiveTile[] iTile = new InteractiveTile[50];
     public ArrayList<Entity> projectileList = new ArrayList<>();
+    public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
 
     //GAMESTATE
@@ -77,8 +80,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
-
-        //playMusic(0);
+        aSetter.setInteractiveTile();
         gameState = titleState;
     }
 
@@ -149,6 +151,23 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
         }
+
+        for (int i = 0; i < particleList.size(); i++) {
+            if (particleList.get(i) != null) {
+                if (particleList.get(i).alive) {
+                    particleList.get(i).update();
+                }
+                if (!particleList.get(i).alive) {
+                    particleList.remove(i);
+                }
+            }
+        }
+
+        for (int i = 0; i<iTile.length;i++){
+            if (iTile[i] != null){
+                iTile[i].update();
+            }
+        }
     }
         if (gameState == pauseState){
             // do nothing for now
@@ -177,6 +196,12 @@ public class GamePanel extends JPanel implements Runnable{
             //tile
             tileM.draw(g2);
 
+            //interactive tiles
+            for (int i = 0; i < iTile.length; i++){
+                if (iTile[i] != null){
+                    iTile[i].draw(g2);
+                }
+            }
             //add entities to list
             entityList.add(player);
 
@@ -198,6 +223,11 @@ public class GamePanel extends JPanel implements Runnable{
             for (int i = 0; i < projectileList.size(); i++) {
                 if (projectileList.get(i) != null) {
                     entityList.add(projectileList.get(i));
+                }
+            }
+            for (int i = 0; i < particleList.size(); i++) {
+                if (particleList.get(i) != null) {
+                    entityList.add(particleList.get(i));
                 }
             }
 
