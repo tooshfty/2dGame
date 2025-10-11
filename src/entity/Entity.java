@@ -38,6 +38,8 @@ public class Entity {
     //Character status
     public int maxLife;
     public int life;
+    public int maxMana;
+    public int mana;
     public int level;
     public int strength;
     public int dexterity;
@@ -48,6 +50,10 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Projectile projectile;
+    public int useCost;
+    public int ammo;
+    public int value;
 
     public int attackValue;
     public int defenseValue;
@@ -61,6 +67,7 @@ public class Entity {
     public boolean dying = false;
     boolean hpBarOn = false;
     int hpBarCounter;
+    public int shotAvailableCounter;
     public int type; // 0 = player, 1 = npc, 2 = monster
     public final int type_player = 0;
     public final int type_npc = 1;
@@ -69,6 +76,7 @@ public class Entity {
     public final int type_axe = 4;
     public final int type_shield = 5;
     public final int type_consumable = 6;
+    public final int type_pickupOnly = 7;
 
 
     public Entity(GamePanel gp){
@@ -103,6 +111,20 @@ public class Entity {
 
     }
     public void use(Entity entity){}
+    public void checkDrop() {
+
+    }
+    public void dropItem(Entity droppedItem){
+
+        for(int i = 0; i < gp.obj.length; i++) {
+            if (gp.obj[i] == null) {
+                gp.obj[i] = droppedItem;
+                gp.obj[i].worldX = worldX;
+                gp.obj[i].worldY = worldY;
+                break;//very important to have break
+            }
+        }
+    }
     public void update(){
 
         setAction();
@@ -115,15 +137,7 @@ public class Entity {
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
         if (this.type == type_monster && contactPlayer) {
-            if (!gp.player.invincible){
-                gp.playSE(6);
-                int damage = attack - gp.player.defense;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                gp.player.life -= damage;
-                gp.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
         if (!collisionOn) {
 
@@ -161,6 +175,23 @@ public class Entity {
                 invincibleCounter = 0;
             }
         }
+        if (shotAvailableCounter < 30) {
+            shotAvailableCounter++;
+        }
+    }
+
+    public void damagePlayer(int attack){
+
+        if (!gp.player.invincible){
+            gp.playSE(6);
+            int damage = attack - gp.player.defense;
+            if (damage < 0) {
+                damage = 0;
+            }
+            gp.player.life -= damage;
+            gp.player.invincible = true;
+        }
+
     }
 
     public void draw(Graphics2D g2){
@@ -239,7 +270,7 @@ public class Entity {
                 dyingAnimation(g2);
             }
 
-            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(image, screenX, screenY,null);
 
             //reset transparency
             changeAlpha(g2,1f);
@@ -282,7 +313,6 @@ public class Entity {
             changeAlpha(g2,1f);
         }
         if (dyingCounter > i * 8) {
-            dying = false;
             alive = false;
         }
     }

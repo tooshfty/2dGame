@@ -6,7 +6,7 @@ import java.security.Key;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed;
     GamePanel gp;
     //Debug
     boolean showDebugText = false;
@@ -152,6 +152,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_C){
             gp.gameState = gp.characterState;
         }
+        if (code == KeyEvent.VK_F){
+            shotKeyPressed = true;
+        }
     }
     public void pauseState(int code){
         System.out.println("pState called");
@@ -215,6 +218,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code==KeyEvent.VK_D){
             rightPressed = false;
+        }
+        if (code == KeyEvent.VK_F){
+            shotKeyPressed = false;
         }
     }
 }
