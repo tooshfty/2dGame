@@ -1,5 +1,6 @@
 package Main;
 
+import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
@@ -43,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     //System
     public KeyHandler keyH = new KeyHandler(this);
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -52,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
     public EventHandler eHandler = new EventHandler(this);
     Config config = new Config(this);
+    public PathFinder pFinder = new PathFinder(this);
 
 
     //Entity and object
