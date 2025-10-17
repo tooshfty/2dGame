@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Entity {
 
@@ -52,8 +53,11 @@ public class Entity {
     public Entity currentShield;
     public Projectile projectile;
     public int useCost;
+    public int price;
     public int ammo;
     public int value;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
 
     public int attackValue;
     public int defenseValue;
@@ -68,6 +72,8 @@ public class Entity {
     boolean hpBarOn = false;
     int hpBarCounter;
     public int shotAvailableCounter;
+
+    //Typing
     public int type; // 0 = player, 1 = npc, 2 = monster
     public final int type_player = 0;
     public final int type_npc = 1;

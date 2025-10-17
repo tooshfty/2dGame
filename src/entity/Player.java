@@ -20,8 +20,7 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCancel = false;
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int maxInventorySize = 20;
+
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -41,10 +40,6 @@ public class Player extends Entity{
 
         //attackArea.width = 36;
         //attackArea.height = 36;
-
-
-
-
 
         setDefaultValues();
         getPlayerImage();
@@ -66,6 +61,8 @@ public class Player extends Entity{
 
         //worldX = gp.tileSize * 23 - (gp.tileSize/2);
         //worldY = gp.tileSize * 21 - (gp.tileSize/2);
+
+        //gp.currentMap = 0;
         worldX = gp.tileSize * 12;
         worldY = gp.tileSize * 12;
         speed = 4;
@@ -82,7 +79,7 @@ public class Player extends Entity{
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
-        coin = 0;
+        coin = 33;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
         projectile = new OBJ_Fireball(gp);
@@ -97,6 +94,7 @@ public class Player extends Entity{
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
+
     }
 
     public int getAttack(){
@@ -463,7 +461,7 @@ public class Player extends Entity{
 
     public void selectItem() {
 
-        int itemIndex = gp.ui.getItemIndexOnSlot();
+        int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol,gp.ui.playerSlotRow);
 
         if (itemIndex < inventory.size()) {
 
