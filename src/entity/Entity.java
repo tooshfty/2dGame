@@ -390,7 +390,7 @@ public class Entity {
 
         gp.pFinder.setNodes(startCol,startRow,goalCol,goalRow);
 
-        if (gp.pFinder.search()) {
+        if (gp.pFinder.search() == true) {
 
             //next worldX and worldY
             int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
@@ -408,7 +408,7 @@ public class Entity {
             else if (entityTopY < nextY && entityLeftX >= nextX && entityRightX < nextX + gp.tileSize){
                 direction = "down";
             }
-            else if (entityTopY >= nextY && entityBotY < nextY +gp.tileSize) {
+            else if (entityTopY >= nextY && entityBotY < nextY + gp.tileSize) {
                 //left or right
                 if (entityLeftX > nextX){
                     direction = "left";

@@ -16,7 +16,9 @@ public class PathFinder {
 
     public PathFinder(GamePanel gp){
         this.gp = gp;
+        instantiateNodes();
     }
+
     public void instantiateNodes(){
 
         node = new Node[gp.maxWorldCol][gp.maxWorldRow];
@@ -45,6 +47,7 @@ public class PathFinder {
             node[col][row].open = false;
             node[col][row].checked = false;
             node[col][row].solid = false;
+
             col++;
             if (col == gp.maxWorldCol){
                 col = 0;
@@ -125,15 +128,15 @@ public class PathFinder {
             if (row - 1 >= 0) {
                 openNode(node[col][row - 1]);
             }
-            //open the "UP" node
+            //open the "LEFT" node
             if (col - 1 >= 0) {
                 openNode(node[col - 1][row]);
             }
-            //open the "UP" node
+            //open the "DOWN" node
             if (row + 1 < gp.maxWorldRow) {
                 openNode(node[col][row + 1]);
             }
-            //open the "UP" node
+            //open the "RIGHT" node
             if (col + 1 < gp.maxWorldCol) {
                 openNode(node[col + 1][row]);
             }
@@ -148,8 +151,11 @@ public class PathFinder {
                 if (openList.get(i).fCost < bestNodefCost) {
                     bestNodeIndex = i;
                     bestNodefCost = openList.get(i).fCost;
-                } else if (openList.get(i).fCost == bestNodefCost) {
-                    bestNodeIndex = i;
+                }
+                else if (openList.get(i).fCost == bestNodefCost) {
+                    if (openList.get(i).gCost < openList.get(bestNodeIndex).gCost){
+                        bestNodeIndex = i;
+                    }
                 }
             }
             //if there is no node in the openList, end the loop
@@ -171,7 +177,7 @@ public class PathFinder {
 
     public void openNode(Node node){
 
-        if (!node.open && !node.checked && !node.solid){
+        if (node.open == false && node.checked == false && node.solid== false){
 
             node.open = true;
             node.parent = currentNode;

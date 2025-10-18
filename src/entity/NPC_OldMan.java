@@ -47,7 +47,8 @@ public class NPC_OldMan extends Entity{
             int goalRow = 9;
 
             searchPath(goalCol,goalRow);
-        }else {
+        }
+        else {
             actionLockCounter++;
 
             if (actionLockCounter == 120) {
