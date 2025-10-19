@@ -95,6 +95,25 @@ public class Player extends Entity{
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
+
+
+
+
 
     }
 
@@ -361,9 +380,15 @@ public class Player extends Entity{
 
             //pickup only items
             if (gp.obj[gp.currentMap][i].type == type_pickupOnly) {
-
                 gp.obj[gp.currentMap][i].use(this);
                 gp.obj[gp.currentMap][i] = null;
+            }
+            //obstacle
+            else if (gp.obj[gp.currentMap][i].type == type_obstacle ) {
+                if (keyH.enterPressed){
+                    attackCancel = true;
+                    gp.obj[gp.currentMap][i].interact();
+                }
             } else {
 
                 String text;
@@ -510,9 +535,9 @@ public class Player extends Entity{
                 defense = getDefense();
             }
             if (selectedItem.type == type_consumable) {
-
-                selectedItem.use(this);
-                inventory.remove(itemIndex);
+                if (selectedItem.use(this)){
+                    inventory.remove(itemIndex);
+                }
                 //decide what to do with consumables, condition check that you can use the consumable
             }
         }
