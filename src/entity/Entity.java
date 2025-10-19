@@ -61,6 +61,8 @@ public class Entity {
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 20;
     public int defaultSpeed;
+    public boolean stackable = false;
+    public int amount = 1;
 
     public int attackValue;
     public int defenseValue;

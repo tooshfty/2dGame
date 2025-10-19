@@ -17,6 +17,7 @@ public class OBJ_Key extends Entity {
         down1 = setup("/objects/key",gp.tileSize,gp.tileSize);
         description = "[" + name + "]\nAn old key.";
         type = type_consumable;
+        stackable = true;
 
     }
 
