@@ -53,6 +53,7 @@ public class Entity {
     public Entity currentWeapon;
     public Entity currentShield;
     public Projectile projectile;
+    public Entity currentLight;
     public int knockbackPower;
     public int useCost;
     public int price;
@@ -67,6 +68,7 @@ public class Entity {
     public int attackValue;
     public int defenseValue;
     public String description = "";
+    public int lightRadius;
 
     public BufferedImage image, image2, image3;
     public String name;
@@ -91,6 +93,7 @@ public class Entity {
     public final int type_consumable = 6;
     public final int type_pickupOnly = 7;
     public final int type_obstacle = 8;
+    public final int type_light = 9;
 
 
     public Entity(GamePanel gp){

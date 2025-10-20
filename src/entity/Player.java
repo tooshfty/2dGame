@@ -20,6 +20,7 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCancel = false;
+    public boolean lightUpdated = false;
 
 
     public Player(GamePanel gp, KeyHandler keyH){
@@ -524,6 +525,15 @@ public class Player extends Entity{
                     }
                 }
                 //decide what to do with consumables, condition check that you can use the consumable
+            }
+            if (selectedItem.type == type_light){
+                if (currentLight == selectedItem){
+                    currentLight = null;
+                }
+                else {
+                    currentLight = selectedItem;
+                }
+                lightUpdated = true;
             }
         }
 
