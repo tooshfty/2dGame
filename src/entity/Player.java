@@ -72,7 +72,7 @@ public class Player extends Entity{
 
         //player status
         level = 1;
-        maxLife = 6;
+        maxLife = 600;
         life = maxLife;
         maxMana = 4;
         mana = maxMana;
@@ -82,6 +82,8 @@ public class Player extends Entity{
         exp = 0;
         nextLevelExp = 5;
         coin = 33;
+
+
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
         projectile = new OBJ_Fireball(gp);
@@ -103,6 +105,8 @@ public class Player extends Entity{
 
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
+        motion1_duration = currentWeapon.motion1_duration;
+        motion2_duration = currentWeapon.motion2_duration;
         return attack = strength * currentWeapon.attackValue;
     }
 
@@ -309,66 +313,7 @@ public class Player extends Entity{
         }
     }
 
-    public void attacking() {
 
-        spriteCounter++;
-
-        if (spriteCounter <= 5) {
-            spriteNum = 1;
-        }
-        if (spriteCounter > 5 && spriteCounter <= 25) {
-            spriteNum = 2;
-
-            //save current worldX,worldY and solidArea
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
-            //adjust player worldx/y for attackArea
-            switch (direction) {
-                case "up":
-                    worldY -= attackArea.height;
-                    break;
-                case "down":
-                    worldY += attackArea.height;
-                    break;
-                case "left":
-                    worldX -= attackArea.width;
-                    break;
-                case "right":
-                    worldX += attackArea.width;
-                    break;
-            }
-
-            //attack area becomes solid area
-            solidArea.width = attackArea.width;
-            solidArea.height = attackArea.height;
-
-            //check monster collision with updated worldX/Y and solid area
-            int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex, attack, currentWeapon.knockbackPower);
-
-            int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
-            damageInteractiveTile(iTileIndex);
-
-            int projectileIndex = gp.cChecker.checkEntity(this,gp.projectile);
-            damageProjectile(projectileIndex);
-
-            //after checking collision, reset original positions
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
-
-        }
-        if (spriteCounter > 25) {
-            spriteNum = 1;
-            spriteCounter = 0;
-            attacking = false;
-        }
-
-
-    }
 
     public void pickUpObject(int i){
 
@@ -438,13 +383,13 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMonster(int i, int attack, int knockbackPower) {
+    public void damageMonster(int i,Entity attacker, int attack, int knockbackPower) {
         if (i!=999) {
             if (!gp.monster[gp.currentMap][i].invincible){
 
                 gp.playSE(5);
                 if (knockbackPower > 0){
-                    knockback(gp.monster[gp.currentMap][i],knockbackPower);
+                    knockback(gp.monster[gp.currentMap][i],attacker,knockbackPower);
                 }
 
 
@@ -470,13 +415,7 @@ public class Player extends Entity{
         }
     }
 
-    public void knockback(Entity entity, int knockbackPower){
 
-        entity.direction = direction;
-        entity.speed += knockbackPower;
-        entity.knockback = true;
-
-    }
 
     public void damageInteractiveTile(int i){
 
@@ -603,76 +542,44 @@ public class Player extends Entity{
         switch (direction) {
             case "up":
                 if (!attacking){
-                    if (spriteNum == 1){
-                        image = up1;
-                    }
-                    if (spriteNum == 2){
-                        image = up2;
-                    }
+                    if (spriteNum == 1){image = up1;}
+                    if (spriteNum == 2){image = up2;}
                 }
                 if (attacking) {
                     tempScreenY = screenY - gp.tileSize;
-                    if (spriteNum == 1) {
-                        image = attackUp1;
-                    }
-                    if (spriteNum == 2) {
-                        image = attackUp2;
-                    }
+                    if (spriteNum == 1) {image = attackUp1;}
+                    if (spriteNum == 2) {image = attackUp2;}
                 }
                 break;
             case "down":
                 if (!attacking){
-                    if (spriteNum == 1){
-                        image = down1;
-                    }
-                    if (spriteNum == 2){
-                        image = down2;
-                    }
+                    if (spriteNum == 1){image = down1;}
+                    if (spriteNum == 2){image = down2;}
                 }
                 if (attacking) {
-                    if (spriteNum == 1) {
-                        image = attackDown1;
-                    }
-                    if (spriteNum == 2) {
-                        image = attackDown2;
-                    }
+                    if (spriteNum == 1) {image = attackDown1;}
+                    if (spriteNum == 2) {image = attackDown2;}
                 }
                 break;
             case "left":
                 if (!attacking){
-                    if (spriteNum == 1){
-                        image = left1;
-                    }
-                    if (spriteNum == 2){
-                        image = left2;
-                    }
+                    if (spriteNum == 1){image = left1;}
+                    if (spriteNum == 2){image = left2;}
                 }
                 if (attacking) {
                     tempScreenX = screenX - gp.tileSize;
-                    if (spriteNum == 1) {
-                        image = attackLeft1;
-                    }
-                    if (spriteNum == 2) {
-                        image = attackLeft2;
-                    }
+                    if (spriteNum == 1) {image = attackLeft1;}
+                    if (spriteNum == 2) {image = attackLeft2;}
                 }
                 break;
             case "right":
                 if (!attacking){
-                    if (spriteNum == 1){
-                        image = right1;
-                    }
-                    if (spriteNum == 2){
-                        image = right2;
-                    }
+                    if (spriteNum == 1){image = right1;}
+                    if (spriteNum == 2){image = right2;}
                 }
                 if (attacking) {
-                    if (spriteNum == 1) {
-                        image = attackRight1;
-                    }
-                    if (spriteNum == 2) {
-                        image = attackRight2;
-                    }
+                    if (spriteNum == 1) {image = attackRight1;}
+                    if (spriteNum == 2) {image = attackRight2;}
                 }
                 break;
         }

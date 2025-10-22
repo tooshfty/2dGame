@@ -23,8 +23,13 @@ public class CollisionChecker {
         int entityBottomRow = (entityBottomWorldY - 1) / gp.tileSize;
 
         int tileNum1, tileNum2;
+        //use temporary direction when being knocked back
+        String direction = entity.direction;
+        if (entity.knockback){
+            direction = entity.knockbackDirection;
+        }
 
-        switch (entity.direction) {
+        switch (direction) {
             case "up":
                 entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize;
                 tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
@@ -78,7 +83,12 @@ public class CollisionChecker {
                 gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;
                 gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
 
-                switch (entity.direction){
+                //use temporary direction when being knocked back
+                String direction = entity.direction;
+                if (entity.knockback){
+                    direction = entity.knockbackDirection;
+                }
+                switch (direction){
                     case "up":
                         entity.solidArea.y -= entity.speed;
                         break;
@@ -115,6 +125,12 @@ public class CollisionChecker {
 
 
         int index = 999;
+        //use temporary direction when being knocked back
+        String direction = entity.direction;
+        if (entity.knockback){
+            direction = entity.knockbackDirection;
+        }
+
 
         for (int i = 0; i < target[1].length; i++){
 
@@ -128,7 +144,7 @@ public class CollisionChecker {
                 target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;
 
 
-                switch (entity.direction){
+                switch (direction){
                     case "up":
                         entity.solidArea.y -= entity.speed;
                         break;
