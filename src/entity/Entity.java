@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Entity {
 
@@ -119,6 +120,11 @@ public class Entity {
     public int getRow() {
         return (worldY + solidArea.y)/gp.tileSize;
     }
+    public int getXDistance(Entity target){return Math.abs(worldX-target.worldX);}
+    public int getYDistance(Entity target){return Math.abs(worldY-target.worldY);}
+    public int getTileDistance(Entity target){return (getXDistance(target) + getYDistance(target))/gp.tileSize;}
+    public int getGoalCol(Entity target){return (target.worldX + target.solidArea.x)/gp.tileSize;}
+    public int getGoalRow(Entity target){return (target.worldY + target.solidArea.y)/gp.tileSize;}
 
     public void setAction(){}
     public void damageReaction(){}
@@ -216,8 +222,6 @@ public class Entity {
     }
     public void update(){
 
-
-
         if (knockback){
 
             checkCollision();
@@ -288,6 +292,64 @@ public class Entity {
         }
         if (shotAvailableCounter < 30) {
             shotAvailableCounter++;
+        }
+    }
+
+    public void checkStopChasing(Entity target, int distance, int rate){
+
+        if (getTileDistance(target) > distance){
+            int i = new Random().nextInt(rate);
+            if (i == 0){
+                onPath = false;
+            }
+        }
+    }
+    public void checkStartChasing(Entity target, int distance, int rate){
+
+        if (getTileDistance(target) < distance){
+            int i = new Random().nextInt(rate);
+            if (i == 0){
+                onPath = true;
+            }
+        }
+    }
+    public void getRandomDirection(){
+
+        actionLockCounter++;
+
+        if (actionLockCounter == 120) {
+            Random random = new Random();
+            int i = random.nextInt(100) + 1;
+
+            if (i <= 25) {
+                direction = "up";
+            }
+            if (i > 25 && i <= 50) {
+                direction = "down";
+            }
+            if (i > 50 && i <= 75) {
+                direction = "left";
+            }
+            if (i > 75 && i <= 100) {
+                direction = "right";
+            }
+            actionLockCounter = 0;
+        }
+    }
+    public void checkShoot(int rate, int shotInterval){
+
+        int i = new Random().nextInt(rate);
+        if (i == 0 && !projectile.alive && shotAvailableCounter == shotInterval) {
+            projectile.set(worldX, worldY, direction, true, this);
+
+            //check vacancy
+            for (int j = 0; j < gp.projectile[1].length; j++) {
+                if (gp.projectile[gp.currentMap][j] == null) {
+                    gp.projectile[gp.currentMap][j] = projectile;
+                    break;
+                }
+            }
+            shotAvailableCounter = 0;
         }
     }
 
