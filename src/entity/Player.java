@@ -97,6 +97,7 @@ public class Player extends Entity{
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
         inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Tent(gp));
 
     }
 
@@ -119,6 +120,18 @@ public class Player extends Entity{
         left2 = setup("/player/boy_left_2",gp.tileSize,gp.tileSize);
         right1 = setup("/player/boy_right_1",gp.tileSize,gp.tileSize);
         right2 = setup("/player/boy_right_2",gp.tileSize,gp.tileSize);
+    }
+
+    public void getSleepingImage(BufferedImage image){
+
+        up1 = image;
+        up2 = image;
+        down1 = image;
+        down2 = image;
+        left1 = image;
+        left2 = image;
+        right1 = image;
+        right2 = image;
     }
 
     public void getPlayerAttackImage() {

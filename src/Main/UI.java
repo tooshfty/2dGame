@@ -15,7 +15,7 @@ public class UI {
 
     GamePanel gp;
     Graphics2D g2;
-    Font maruMonica, purisaB;
+    public Font maruMonica, purisaB;
     //BufferedImage keyImage;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
     public boolean messageOn = false;
@@ -120,7 +120,35 @@ public class UI {
         if (gp.gameState == gp.tradeState){
             drawTradeScreen();
         }
+        //Sleep state
+        if (gp.gameState == gp.sleepState){
+            drawSleepScreen();
+        }
     }
+
+    public void drawSleepScreen() {
+
+        counter++;
+
+        if (counter < 120) {
+            gp.eManager.lighting.filterAlpha += 0.01f;
+            if (gp.eManager.lighting.filterAlpha > 1f){
+                gp.eManager.lighting.filterAlpha = 1f;
+            }
+        }
+        if (counter >= 120) {
+            gp.eManager.lighting.filterAlpha -= 0.001f;
+            if (gp.eManager.lighting.filterAlpha <= 0f){
+                gp.eManager.lighting.filterAlpha = 0f;
+                counter = 0;
+                gp.eManager.lighting.dayState = gp.eManager.lighting.day;
+                gp.eManager.lighting.dayCounter = 0;
+                gp.gameState = gp.playState;
+                gp.player.getPlayerImage();
+            }
+        }
+    }
+
 
     public void drawTradeScreen() {
 
@@ -1038,66 +1066,3 @@ public class UI {
         return x;
     }
 }
-
-
-
-
-
-
-
-
-
-//treasure game info
-//        if (gameFinished) {
-//
-//            g2.setFont(arial_40);
-//            g2.setColor(Color.yellow);
-//
-//            String text;
-//            int textLength;
-//            int x;
-//            int y;
-//
-//            text = "You found the treasure!";
-//            textLength = (int) g2.getFontMetrics().getStringBounds(text,g2).getWidth();
-//            x = gp.screenWidth/2 - textLength/2;
-//            y = gp.screenHeight/2 - (gp.tileSize * 3);
-//            g2.drawString(text, x,y);
-//
-//
-//            text = "Your time is: " + dFormat.format(playTime) + "!";
-//            textLength = (int) g2.getFontMetrics().getStringBounds(text,g2).getWidth();
-//            x = gp.screenWidth/2 - textLength/2;
-//            y = gp.screenHeight/2 - (gp.tileSize * 4);
-//            g2.drawString(text, x,y);
-//
-//            g2.setFont(arial_80B);
-//            g2.setColor(Color.yellow);
-//            text = "Congratulations!";
-//            textLength = (int) g2.getFontMetrics().getStringBounds(text,g2).getWidth();
-//            x = gp.screenWidth/2 - textLength/2;
-//            y = gp.screenHeight/2 + (gp.tileSize * 2);
-//            g2.drawString(text, x,y);
-//
-//            gp.gameThread = null;
-//
-//        } else {
-//            g2.setFont(arial_40);
-//            g2.setColor(Color.yellow);
-//            g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2, gp.tileSize, gp.tileSize,null);
-//            g2.drawString("x " + gp.player.hasKey, 74, 65);
-//
-//            playTime += (double) 1/60;
-//            g2.drawString("Time: " + dFormat.format(playTime), gp.tileSize * 11, 65);
-//
-//            if (messageOn){
-//                g2.setFont(g2.getFont().deriveFont(30F));
-//                g2.drawString(message, gp.tileSize/2, gp.tileSize * 5 );
-//
-//                messageCounter++;
-//                if (messageCounter > 120) {
-//                    messageCounter = 0;
-//                    messageOn = false;
-//                }
-//            }
-//        }

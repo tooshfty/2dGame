@@ -3,15 +3,21 @@ package environment;
 import Main.GamePanel;
 
 import java.awt.*;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Lighting {
 
     GamePanel gp;
     BufferedImage darknessFilter;
+    public int dayCounter;
+    public float filterAlpha = 0f;
+
+    //day state
+    public final int day = 0;
+    public final int dusk = 1;
+    public final int night = 2;
+    public final int dawn = 3;
+    public int dayState = day;
 
     public Lighting(GamePanel gp){
         this.gp = gp;
@@ -80,13 +86,73 @@ public class Lighting {
 
     public void update() {
 
+       cycleDay();
+    }
+    public void draw(Graphics2D g2){
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
+        g2.drawImage(darknessFilter,0,0,null);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        //debug
+        String situation = "";
+
+        switch (dayState){
+            case day: situation = "day";break;
+            case dusk: situation = "dusk";break;
+            case night: situation = "night";break;
+            case dawn: situation = "dawn";break;
+        }
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(50f));
+        g2.drawString(situation,800,500);
+    }
+
+    /** for now this has same functionality as having it inside the update method, but id like to add
+     handling of mapfile parameter to determine how long the day cycles are for each map
+     this would add some more nuanced or complex gameplay by letting each map have a different day cycle.
+     Ideally different mobs on different maps have adaptive abilities or skills they can use during certain dayStates
+     something like taking in an integer or enum that determines the basic state - ie(void = 1, earth = 2, hell  3...)
+     **/
+    public void cycleDay() {
         if (gp.player.lightUpdated){
             setLightSource();
             gp.player.lightUpdated = false;
         }
-    }
-    public void draw(Graphics2D g2){
 
-        g2.drawImage(darknessFilter,0,0,null);
+        //check state of day
+        if (dayState == day){
+            dayCounter++;
+            if (dayCounter > 1200) {
+                dayState = dusk;
+                dayCounter = 0;
+            }
+        }
+        if (dayState == dusk) {
+
+            filterAlpha += 0.001f;
+
+            if (filterAlpha > 1f){
+                filterAlpha = 1f;
+                dayState = night;
+            }
+        }
+        if (dayState == night){
+
+            dayCounter++;
+            if (dayCounter > 1200){
+                dayState = dawn;
+                dayCounter++;
+            }
+        }
+        if (dayState == dawn){
+
+            filterAlpha -= 0.001f;
+
+            if (filterAlpha < 0f){
+                filterAlpha = 0f;
+                dayState = day;
+            }
+        }
     }
 }

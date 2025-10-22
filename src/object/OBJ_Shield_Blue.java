@@ -4,6 +4,7 @@ import Main.GamePanel;
 import entity.Entity;
 
 public class OBJ_Shield_Blue extends Entity {
+
     public OBJ_Shield_Blue(GamePanel gp) {
         super(gp);
 
