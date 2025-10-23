@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed;
     GamePanel gp;
     //Debug
     boolean showDebugText = false;
@@ -313,6 +313,9 @@ public class KeyHandler implements KeyListener {
                 gp.map.miniMapOn = false;
             }
         }
+        if (code == KeyEvent.VK_SPACE){
+            spacePressed = true;
+        }
 
     }
     public void pauseState(int code){
@@ -418,6 +421,12 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_F){
             shotKeyPressed = false;
+        }
+        if (code == KeyEvent.VK_SPACE){
+            spacePressed = false;
+        }
+        if (code == KeyEvent.VK_ENTER){
+            enterPressed = false;
         }
     }
 }

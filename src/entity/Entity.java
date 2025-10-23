@@ -21,6 +21,7 @@ public class Entity {
             left1, left2, right1, right2;
     public BufferedImage attackUp1, attackUp2, attackDown1,
             attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    public BufferedImage guardUp, guardDown, guardLeft, guardRight;
     public String direction = "down";
 
     public int spriteCounter = 0;
@@ -68,6 +69,8 @@ public class Entity {
     public int defaultSpeed;
     public boolean stackable = false;
     public int amount = 1;
+    public boolean guarding = false;
+    public boolean transparent = false;
 
     public int attackValue;
     public int defenseValue;
@@ -86,6 +89,12 @@ public class Entity {
     public int shotAvailableCounter;
     public boolean knockback = false;
     public String knockbackDirection;
+
+    //states
+    public boolean offBalance;
+    //Counters
+    public int guardCounter = 0;
+    int offBalanceCounter = 0;
 
     //Typing
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -203,6 +212,17 @@ public class Entity {
         int maxLife = 0;
         return maxLife;
     }
+    public String getOppositDiretion(String direction){
+        String oppositeDirection = "";
+
+        switch (direction){
+            case "up": oppositeDirection = "down"; break;
+            case "down": oppositeDirection = "up"; break;
+            case "left": oppositeDirection = "right"; break;
+            case "right": oppositeDirection = "left"; break;
+        }
+        return oppositeDirection;
+    }
     public void generateParticle(Entity generator, Entity target){
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
@@ -305,6 +325,13 @@ public class Entity {
         }
         if (shotAvailableCounter < 30) {
             shotAvailableCounter++;
+        }
+        if (offBalance){
+            offBalanceCounter++;
+            if (offBalanceCounter > 60){
+                offBalance = false;
+                offBalanceCounter = 0;
+            }
         }
     }
 
@@ -481,9 +508,38 @@ public class Entity {
         if (!gp.player.invincible){
             gp.playSE(6);
             int damage = attack - gp.player.defense;
-            if (damage < 0) {
-                damage = 0;
+            //get opposite direction of this attacker
+            String canGuardDirection = getOppositDiretion(direction);
+
+            //if player is guarding correct direction
+            if (gp.player.guarding && gp.player.direction.equals(canGuardDirection)){
+
+                //parry
+                if (gp.player.guardCounter < 10){
+                    damage = 0;
+                    gp.playSE(16);
+                    knockback(this,gp.player,knockbackPower);
+                    offBalance = true;
+                    //temporary stun effect
+                    spriteCounter -= 60;
+                }
+                //normal guard
+                damage /= 3;
+                gp.playSE(15);
             }
+            else {
+                //not guarding
+                gp.playSE(6);
+                if (damage < 1) {
+                    damage = 1;
+                }
+            }
+
+            if (damage!=0){
+                gp.player.transparent = true;
+                knockback(gp.player,this,knockbackPower);
+            }
+
             gp.player.life -= damage;
             gp.player.invincible = true;
         }
