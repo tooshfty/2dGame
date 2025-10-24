@@ -85,7 +85,7 @@ public class Player extends Entity{
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
-        coin = 33;
+        coin = 999;
 
 
         currentWeapon = new OBJ_Sword_Normal(gp);
@@ -605,16 +605,18 @@ public class Player extends Entity{
 
         boolean canObtain = false;
 
-        //check if stackable
-        if (item.stackable){
+        Entity newItem = gp.eGenerator.getObject(item.name);
 
-            int index = searchItemInInventory(item.name);
+        //check if stackable
+        if (newItem.stackable){
+
+            int index = searchItemInInventory(newItem.name);
             if (index != 999){
                 inventory.get(index).amount++;
                 canObtain = true;
             }else {
-                if (inventory.size()!=maxInventorySize){
-                    inventory.add(item);
+                if (inventory.size() != maxInventorySize){
+                    inventory.add(newItem);
                     canObtain = true;
                 }
             }

@@ -1,10 +1,7 @@
 package entity;
 
 import Main.GamePanel;
-import object.OBJ_Boots;
-import object.OBJ_Mana_Crystal;
-import object.OBJ_Potion_Red;
-import object.OBJ_Shield_Blue;
+import object.*;
 
 import java.util.Random;
 
@@ -53,6 +50,7 @@ public class NPC_Merchant extends Entity{
         inventory.add(new OBJ_Potion_Red(gp));
         inventory.add(new OBJ_Boots(gp));
         inventory.add(new OBJ_Shield_Blue(gp));
+        inventory.add(new OBJ_Sword_Normal(gp));
 
     }
 

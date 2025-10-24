@@ -9,11 +9,11 @@ import java.io.IOException;
 public class OBJ_Key extends Entity {
 
     GamePanel gp;
-
+    public static final String objName = "Key";
     public OBJ_Key(GamePanel gp){
         super(gp);
         this.gp = gp;
-        name = "Key";
+        name = objName;
         down1 = setup("/objects/key",gp.tileSize,gp.tileSize);
         description = "[" + name + "]\nAn old key.";
         type = type_consumable;
