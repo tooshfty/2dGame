@@ -61,18 +61,22 @@ public class Sound {
     }
 
     public void play(){
-
-        clip.start();
+        if (clip != null){
+            clip.start();
+        }
     }
 
     public void loop(){
-
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        if (clip != null){
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
     }
 
     public void stop(){
 
-        clip.stop();
+        if (clip != null){
+            clip.stop();
+        }
     }
 
     public void checkVolume() {
