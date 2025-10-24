@@ -18,12 +18,17 @@ public class SaveLoad {
     /**
      * currently using string itemName for switch case handling, might be better to replace with an item index so names
      * can be changed freely as item number indexes shouldn't change
+     * There are also issues with nullpointerexception if ANY items on the map are not instantiated in the switch
+     * below.
      * @param itemName
      * @return
      */
     public Entity getObject(String itemName){
 
         Entity obj = null;
+        if (itemName == null){
+            return null;
+        }
         switch (itemName){
             case "Woodcutter's Axe": obj = new OBJ_Axe(gp); break;
             case "Boots": obj = new OBJ_Boots(gp); break;
