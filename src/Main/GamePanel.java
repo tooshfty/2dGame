@@ -1,6 +1,7 @@
 package Main;
 
 import ai.PathFinder;
+import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
@@ -58,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable{
     public PathFinder pFinder = new PathFinder(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
     Map map = new Map(this);
+    SaveLoad saveLoad = new SaveLoad(this);
 
 
     //Entity and object
@@ -123,25 +125,25 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
-    public void retry(){
+    /**
+     * currently not resetting daytime when you press 'retry' not sure how i want to handle so will come back to it
+     * @param restart
+     */
+    public void resetGame(boolean restart){
+
         player.setDefaultPositions();
-        player.restoreLifeAndMana();
+        player.restoreStatus();
         aSetter.setNPC();
         aSetter.setMonster();
-        playMusic(0);
+
+        if (restart) {
+            player.setDefaultValues();
+            aSetter.setObject();
+            aSetter.setInteractiveTile();
+            eManager.lighting.resetDay();
+        }
     }
 
-    public void restart() {
-
-        player.setDefaultValues();
-        player.setDefaultPositions();
-        player.restoreLifeAndMana();
-        player.setItems();
-        aSetter.setObject();
-        aSetter.setNPC();
-        aSetter.setMonster();
-        aSetter.setInteractiveTile();
-    }
 
     public void setFullScreen() {
 

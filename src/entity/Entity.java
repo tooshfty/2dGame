@@ -92,6 +92,8 @@ public class Entity {
 
     //states
     public boolean offBalance;
+    public Entity loot;
+    public boolean opened = false;
     //Counters
     public int guardCounter = 0;
     int offBalanceCounter = 0;
@@ -140,6 +142,7 @@ public class Entity {
     public int getGoalRow(Entity target){return (target.worldY + target.solidArea.y)/gp.tileSize;}
 
     public void setAction(){}
+    public void setLoot(Entity loot){}
     public void damageReaction(){}
     public void knockback(Entity target,Entity attacker, int knockbackPower){
 
@@ -523,9 +526,11 @@ public class Entity {
                     //temporary stun effect
                     spriteCounter -= 60;
                 }
-                //normal guard
-                damage /= 3;
-                gp.playSE(15);
+                else {
+                    //normal guard
+                    damage /= 3;
+                    gp.playSE(15);
+                }
             }
             else {
                 //not guarding
@@ -782,7 +787,7 @@ public class Entity {
             }
         }
     }
-    public int getDetected(Entity user, Entity target[][],String targetName){
+    public int getDetected(Entity user, Entity[][] target,String targetName){
         int index = 999;
 
         //check surrounding object
@@ -791,16 +796,16 @@ public class Entity {
 
         switch (user.direction){
             case "up":
-                nextWorldY = user.getTopY() - 1;
+                nextWorldY = user.getTopY() - gp.player.speed;
                 break;
             case "down":
-                nextWorldY = user.getBotY() + 1;
+                nextWorldY = user.getBotY() + gp.player.speed;
                 break;
             case "left":
-                nextWorldX = user.getLeftX() - 1;
+                nextWorldX = user.getLeftX() - gp.player.speed;
                 break;
             case "right":
-                nextWorldX = user.getRightX() + 1;
+                nextWorldX = user.getRightX() + gp.player.speed;
                 break;
         }
         int col = nextWorldX/gp.tileSize;

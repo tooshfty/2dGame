@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Player extends Entity{
 
@@ -43,10 +42,7 @@ public class Player extends Entity{
         //attackArea.height = 36;
 
         setDefaultValues();
-        getPlayerImage();
-        getPlayerAttackImage();
-        getPlayerGuardImage();
-        setItems();
+
     }
 
     public void setDefaultPositions() {
@@ -54,11 +50,16 @@ public class Player extends Entity{
         worldY = gp.tileSize * 21 - (gp.tileSize/2);
         direction = "down";
     }
-    public void restoreLifeAndMana() {
+    public void restoreStatus() {
         life = maxLife;
         mana = maxMana;
+        speed = defaultSpeed;
         invincible = false;
         transparent = false;
+        attacking = false;
+        guarding = false;
+        knockback = false;
+        lightUpdated = true;
     }
 
     public void setDefaultValues(){
@@ -90,8 +91,13 @@ public class Player extends Entity{
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
         projectile = new OBJ_Fireball(gp);
+        currentLight = null;
         attack = getAttack();
         defense = getDefense();
+        getPlayerImage();
+        getPlayerAttackImage();
+        getPlayerGuardImage();
+        setItems();
 
     }
 
@@ -172,6 +178,26 @@ public class Player extends Entity{
         guardLeft = setup("/player/boy_guard_left",gp.tileSize, gp.tileSize);
         guardRight = setup("/player/boy_guard_right",gp.tileSize, gp.tileSize);
 
+    }
+    public int getCurrentWeaponSlot(){
+
+        int currentWeaponSlot = 0;
+        for (int i = 0; i < inventory.size(); i++){
+            if (inventory.get(i) == currentWeapon){
+                currentWeaponSlot = i;
+            }
+        }
+        return currentWeaponSlot;
+    }
+    public int getCurrentShieldSlot(){
+
+        int currentShieldSlot = 0;
+        for (int i = 0; i < inventory.size(); i++){
+            if (inventory.get(i) == currentShield){
+                currentShieldSlot = i;
+            }
+        }
+        return currentShieldSlot;
     }
 
     public BufferedImage setup(String imageName){

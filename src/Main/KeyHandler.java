@@ -119,10 +119,10 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER){
             if (gp.ui.commandNum == 0){
                 gp.gameState = gp.playState;
-                gp.retry();
+                gp.resetGame(false);
             } else if (gp.ui.commandNum == 1) {
                 gp.gameState = gp.titleState;
-                gp.restart();
+                gp.resetGame(true);
             }
         }
         if (code == KeyEvent.VK_W){
@@ -228,7 +228,9 @@ public class KeyHandler implements KeyListener {
                         gp.playSE(1);
                         break;
                     case 1:
-                        System.out.println("not ready");
+                        gp.saveLoad.load();
+                        gp.gameState = gp.playState;
+                        gp.playSE(1);
                         break;
                     case 2:
                         System.exit(0);
