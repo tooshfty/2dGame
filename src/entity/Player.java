@@ -623,8 +623,8 @@ public class Player extends Entity{
         }
         //not stackable
         else {
-            if (inventory.size()!=maxInventorySize){
-                inventory.add(item);
+            if (inventory.size()!= maxInventorySize){
+                inventory.add(newItem);
                 canObtain = true;
             }
         }

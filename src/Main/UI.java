@@ -249,7 +249,7 @@ public class UI {
             g2.drawString(text, x, y + 34);
 
 
-            //buy item---------for some reason the transaction ends when you dont have enough space or coins
+            //buy item---------for some reason the transaction ends when you don't have enough space or coins
             if (gp.keyH.enterPressed) {
                 if (npc.inventory.get(itemIndex).price > gp.player.coin) {
                     subState = 0;
