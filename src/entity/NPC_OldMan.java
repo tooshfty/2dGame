@@ -4,6 +4,7 @@ import Main.GamePanel;
 import Main.UtilityTool;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
@@ -15,6 +16,14 @@ public class NPC_OldMan extends Entity{
 
         direction = "down";
         speed = 1;
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        solidArea.width = 30;
+        solidArea.height = 30;
+        dialogueSet = -1;
         getImage();
         setDialogue();
     }
@@ -30,13 +39,21 @@ public class NPC_OldMan extends Entity{
         right2 = setup("/NPC/oldman_right_2",gp.tileSize,gp.tileSize);
     }
 
+    //currently having an issue with cycling dialogue, not a big problem atm but will need to address it in the future
     public void setDialogue() {
 
-        dialogues[0] = "Howdy";
-        dialogues[1] = "Howdy1";
-        dialogues[2] = "Howdy2 ";
-        dialogues[3] = "Howdy3";
-        dialogues[4] = "Howdy4";
+        //first index is dialogue set, second index is dialogue index
+        dialogues[0][0] = "Howdy";
+        dialogues[0][1] = "Howdy there";
+        dialogues[0][2] = "Howdy there partner";
+        dialogues[0][3] = "Howdy there partner how ";
+
+        dialogues[1][0] = "Hello";
+        dialogues[1][1] = "Hello how";
+        dialogues[1][2] = "Hello how are";
+
+        dialogues[2][0] = "Hi";
+        dialogues[2][1] = "Hi there";
 
     }
 
@@ -77,9 +94,14 @@ public class NPC_OldMan extends Entity{
     public void speak() {
 
         //character specific dialogue
-        super.speak();
+        facePlayer();
+        startDialogue(this,dialogueSet);
+        dialogueSet++;
+        if (dialogues[dialogueSet][0] == null){
 
-        onPath = true;
+            dialogueSet--;
+        }
+        //onPath = true;
     }
 
 }

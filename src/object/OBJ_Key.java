@@ -18,23 +18,27 @@ public class OBJ_Key extends Entity {
         description = "[" + name + "]\nAn old key.";
         type = type_consumable;
         stackable = true;
+        setDialogue();
 
     }
 
     public boolean use(Entity entity){
 
-        gp.gameState = gp.dialogueState;
-
         int objIndex = getDetected(entity, gp.obj, "Door");
 
         if (objIndex != 999){
-            gp.ui.currentDialogue = "You use the " + name + " and open the door";
+            startDialogue(this,0);
             gp.playSE(3);
             gp.obj[gp.currentMap][objIndex] = null;
             return true;
         } else {
-            gp.ui.currentDialogue = "Find a locked door to use this on!";
+            startDialogue(this,1);
             return false;
         }
+    }
+
+    public void setDialogue(){
+        dialogues[0][0] = "You use the " + name + " and open the door";
+        dialogues[1][0] = "Find a locked door to use this on!";
     }
 }

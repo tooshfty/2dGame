@@ -33,15 +33,18 @@ public class NPC_Merchant extends Entity{
 
     public void setDialogue() {
 
-        dialogues[0] = "What can I do ya for?";
-
+        dialogues[0][0] = "What can I do ya for?";
+        dialogues[1][0] = "Come again.";
+        dialogues[2][0] = "You don't have enough coin!";
+        dialogues[3][0] = "You cannot carry any more!";
+        dialogues[4][0] = "You cannot sell an item when equipped!";
 
     }
 
     public void speak() {
 
         //character specific dialogue
-        super.speak();
+        facePlayer();
         gp.gameState = gp.tradeState;
         gp.ui.npc = this;
     }

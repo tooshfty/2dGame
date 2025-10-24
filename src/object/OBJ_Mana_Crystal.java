@@ -19,12 +19,11 @@ public class OBJ_Mana_Crystal extends Entity {
         image2 = setup("/objects/manacrystal_blank",gp.tileSize,gp.tileSize);
     }
 
-    public boolean use(Entity entity) {
-
-        gp.playSE(2);
-        gp.ui.addMessage("Mana + " + value);
-        entity.mana += value;
-        return true;
-
-    }
+//    public boolean use(Entity entity) {
+//
+//        gp.playSE(2);
+//        gp.ui.addMessage("Mana + " + value);
+//        entity.mana += value;
+//        return true;
+//    }
 }

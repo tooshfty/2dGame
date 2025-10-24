@@ -444,7 +444,6 @@ public class Player extends Entity{
 
             if (index != 999){
                 attackCancel = true;
-                gp.gameState = gp.dialogueState;
                 gp.npc[gp.currentMap][index].speak();
             }
         }
@@ -539,8 +538,12 @@ public class Player extends Entity{
 
             gp.playSE(8);
             gp.gameState = gp.dialogueState;
-            gp.ui.currentDialogue = "You are level " + level + " now\n";
+            setDialogue();
+            startDialogue(this,0);
         }
+    }
+    public void setDialogue(){
+        dialogues[0][0] = "You are level " + level + " now\n";
     }
 
     public void selectItem() {

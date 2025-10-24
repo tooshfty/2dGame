@@ -24,20 +24,21 @@ public class Entity {
     public BufferedImage guardUp, guardDown, guardLeft, guardRight;
     public String direction = "down";
 
-    public int spriteCounter = 0;
+
     public int spriteNum = 1;
-    int knockbackCounter = 0;
+
 
     public Rectangle solidArea = new Rectangle(0,0,48,48);
     public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
-    public int actionLockCounter = 0;
+
     public boolean invincible = false;
-    public int invincibleCounter = 0;
-    int dyingCounter = 0;
-    String[] dialogues = new String[20];
-    int dialogueIndex = 0;
+
+
+    //first index is dialogue set, second index is dialogue index
+    public String[][] dialogues = new String[20][20];
+    public int dialogueIndex = 0;
     public Entity attacker;
 
     //Character status
@@ -71,12 +72,10 @@ public class Entity {
     public int amount = 1;
     public boolean guarding = false;
     public boolean transparent = false;
-
     public int attackValue;
     public int defenseValue;
     public String description = "";
     public int lightRadius;
-
     public BufferedImage image, image2, image3;
     public String name;
     public boolean collision = false;
@@ -85,8 +84,6 @@ public class Entity {
     public boolean dying = false;
     boolean hpBarOn = false;
     public boolean onPath = false;
-    int hpBarCounter;
-    public int shotAvailableCounter;
     public boolean knockback = false;
     public String knockbackDirection;
 
@@ -94,9 +91,18 @@ public class Entity {
     public boolean offBalance;
     public Entity loot;
     public boolean opened = false;
+    public int dialogueSet = 0;
+
     //Counters
+    public int spriteCounter = 0;
     public int guardCounter = 0;
     int offBalanceCounter = 0;
+    int knockbackCounter = 0;
+    public int actionLockCounter = 0;
+    public int invincibleCounter = 0;
+    int dyingCounter = 0;
+    int hpBarCounter;
+    public int shotAvailableCounter;
 
     //Typing
     public int type; // 0 = player, 1 = npc, 2 = monster
@@ -143,6 +149,18 @@ public class Entity {
 
     public void setAction(){}
     public void setLoot(Entity loot){}
+    public void resetCounter(){
+
+        spriteCounter = 0;
+        guardCounter = 0;
+        offBalanceCounter = 0;
+        knockbackCounter = 0;
+        actionLockCounter = 0;
+        invincibleCounter = 0;
+        dyingCounter = 0;
+        hpBarCounter = 0;
+        shotAvailableCounter = 0;
+    }
     public void damageReaction(){}
     public void knockback(Entity target,Entity attacker, int knockbackPower){
 
@@ -152,13 +170,8 @@ public class Entity {
         target.knockback = true;
 
     }
-    public void speak(){
-
-        if (dialogues[dialogueIndex]== null){
-            dialogueIndex = 0;
-        }
-        gp.ui.currentDialogue = dialogues[dialogueIndex];
-        dialogueIndex++;
+    public void speak(){}
+    public void facePlayer(){
 
         switch (gp.player.direction){
             case "up":
@@ -174,7 +187,12 @@ public class Entity {
                 direction = "left";
                 break;
         }
+    }
+    public void startDialogue(Entity entity, int setNum){
 
+        gp.gameState = gp.dialogueState;
+        gp.ui.npc = entity;
+        dialogueSet = setNum;
     }
     public void interact() {
 

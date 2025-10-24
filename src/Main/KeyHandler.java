@@ -322,9 +322,9 @@ public class KeyHandler implements KeyListener {
 
     }
     public void pauseState(int code){
-        System.out.println("pState called");
+
         if (code == KeyEvent.VK_P){
-            System.out.println("p pressed");
+
             gp.gameState = gp.playState;
         }
     }
