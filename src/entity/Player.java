@@ -110,6 +110,7 @@ public class Player extends Entity{
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Tent(gp));
+        inventory.add(new OBJ_Lantern(gp));
 
     }
 
