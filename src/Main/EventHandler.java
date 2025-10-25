@@ -67,12 +67,28 @@ public class EventHandler {
                 healingPool(gp.dialogueState);
             }
             else if (hit(0,10,39,"any")){
-                teleport(1,12,13);
+                teleport(1,12,13,gp.indoor);
             }
             else if (hit(1,12,13,"any")){
-                teleport(0,10,39);
+                teleport(0,10,39,gp.outside);
             } else if (hit(1,12,9,"up")) {
                 speak(gp.npc[1][0]);
+            }
+            //OUTSIDE DOWN TO DUNGEON
+            else if (hit(0,12,9,"any")){
+                teleport(2,9,41,gp.dungeon);
+            }
+            //DUNGEON UP TO OUTSIDE
+            else if (hit(2,9,41,"any")){
+                teleport(0,12,9,gp.outside);
+            }
+            //DUNGEON B1 DOWN TO B2
+            else if (hit(2,8,7,"any")){
+                teleport(3,26,41,gp.dungeon);
+            }
+            //DUNGEON B2 UP TO B1
+            else if (hit(3,26,41,"any")){
+                teleport(2,8,7,gp.dungeon);
             }
 
         }
@@ -130,9 +146,10 @@ public class EventHandler {
 
     }
 
-    public void teleport(int map, int col, int row) {
+    public void teleport(int map, int col, int row, int area) {
 
         gp.gameState = gp.transitionState;
+        gp.nextArea = area;
         tempMap = map;
         tempCol = col;
         tempRow = row;

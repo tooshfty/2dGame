@@ -19,6 +19,7 @@ public class InteractiveTile extends Entity {
     public boolean destructible = false;
 
 
+    //may need to add an additional parameter to get mapNum so we can place them around
     public InteractiveTile(GamePanel gp, int col, int row) {
         super(gp);
         this.gp = gp;

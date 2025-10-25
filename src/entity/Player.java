@@ -68,8 +68,8 @@ public class Player extends Entity{
         //worldY = gp.tileSize * 21 - (gp.tileSize/2);
 
         gp.currentMap = 0;
-        worldX = gp.tileSize * 20;
-        worldY = gp.tileSize * 20;
+        worldX = gp.tileSize * 12;
+        worldY = gp.tileSize * 8;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -107,6 +107,7 @@ public class Player extends Entity{
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
+        inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Tent(gp));
 

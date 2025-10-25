@@ -29,6 +29,9 @@ public class TileManager {
         getTileImage();
         loadMap("/maps/worldV3.txt",0);
         loadMap("/maps/interior01.txt",1);
+        loadMap("/maps/dungeon01.txt",2);
+        loadMap("/maps/dungeon02.txt",3);
+
     }
 
     public void getTileImage(){
@@ -81,11 +84,8 @@ public class TileManager {
         setup(42, "hut", false);
         setup(43, "floor01", false);
         setup(44, "table01", true);
-
-
-
-
-
+        setup(45, "stairs_up", true);
+        setup(46, "stairs_down", false);
 
     }
 
