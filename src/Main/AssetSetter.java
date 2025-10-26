@@ -4,10 +4,13 @@ import Main.monster.MON_GreenSlime;
 import Main.monster.MON_Orc;
 import Main.monster.MON_RedSlime;
 import entity.Entity;
+import entity.NPC_Big_Rock;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import object.*;
+import tile_interactive.IT_Destructible_Wall;
 import tile_interactive.IT_Dry_Tree;
+import tile_interactive.IT_Metal_Plate;
 
 public class AssetSetter {
 
@@ -19,6 +22,7 @@ public class AssetSetter {
 
     public void setObject(){
 
+        //Map 0
         int mapNum = 0;
         int i = 0;
         gp.obj[mapNum][i] = new OBJ_Axe(gp);
@@ -75,6 +79,27 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldY = gp.tileSize * 20;
         i++;
 
+        //Map 1
+        mapNum = 1;
+        i = 0;
+
+        //Map 2
+        mapNum = 2;
+        i = 0;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Pickaxe(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize * 40;
+        gp.obj[mapNum][i].worldY = gp.tileSize * 41;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Door_Iron(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize * 18;
+        gp.obj[mapNum][i].worldY = gp.tileSize * 23;
+        i++;
+
+        //Map 3
+        mapNum = 3;
+        i = 0;
+
     }
 
     public void setNPC(){
@@ -101,12 +126,33 @@ public class AssetSetter {
         gp.npc[mapNum][i].worldX = gp.tileSize * 12;
         gp.npc[mapNum][i].worldY = gp.tileSize * 7;
         i++;
+
+        //Map 2
+        mapNum = 2;
+        i = 0;
+        gp.npc[mapNum][i] = new NPC_Big_Rock(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize * 20;
+        gp.npc[mapNum][i].worldY = gp.tileSize * 25;
+        i++;
+        gp.npc[mapNum][i] = new NPC_Big_Rock(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize * 11;
+        gp.npc[mapNum][i].worldY = gp.tileSize * 18;
+        i++;
+        gp.npc[mapNum][i] = new NPC_Big_Rock(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize * 23;
+        gp.npc[mapNum][i].worldY = gp.tileSize * 14;
+        i++;
+        //Map 3
+        mapNum = 3;
+        i = 0;
     }
 
     public void setMonster() {
-        int i = 0;
 
+
+        //Map 0
         int mapNum = 0;
+        int i = 0;
         gp.monster[mapNum][i] = new MON_Orc(gp);
         gp.monster[mapNum][i].worldX = gp.tileSize * 23;
         gp.monster[mapNum][i].worldY = gp.tileSize * 23;
@@ -128,12 +174,24 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldY = gp.tileSize * 35;
         i++;
 
+        //Map 1
+        mapNum = 1;
+        i = 0;
+
+        //Map 2
+        mapNum = 2;
+        i = 0;
+
+        //Map 3
+        mapNum = 3;
+        i = 0;
 
 
     }
 
    public void setInteractiveTile() {
 
+        //Map 0
         int mapNum = 0;
         int i = 0;
 //        gp.iTile[mapNum][i] = new IT_Dry_Tree(gp,27,12);
@@ -158,6 +216,56 @@ public class AssetSetter {
 //       i++;
 //       gp.iTile[mapNum][i] = new IT_Dry_Tree(gp,11,41);
 //       i++;
+       //Map 1
+       mapNum = 1;
+
+       //Map 2
+       mapNum = 2;
+       i = 0;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,18,30);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,17,31);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,17,32);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,17,34);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,18,34);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,18,33);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,10,22);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,10,24);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,38,18);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,38,19);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,38,20);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,38,21);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,18,13);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,18,14);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,22,28);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,30,28);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Destructible_Wall(gp,32,28);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Metal_Plate(gp,20,22);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Metal_Plate(gp,8,17);
+       i++;
+       gp.iTile[mapNum][i] = new IT_Metal_Plate(gp,39,31);
+       i++;
+
+       //Map 3
+       mapNum = 3;
+
 
     }
 }

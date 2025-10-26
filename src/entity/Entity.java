@@ -40,6 +40,7 @@ public class Entity {
     public String[][] dialogues = new String[20][20];
     public int dialogueIndex = 0;
     public Entity attacker;
+    public Entity linkedEntity;
 
     //Character status
     public int maxLife;
@@ -116,6 +117,7 @@ public class Entity {
     public final int type_pickupOnly = 7;
     public final int type_obstacle = 8;
     public final int type_light = 9;
+    public final int type_pickaxe = 10;
 
 
     public Entity(GamePanel gp){
@@ -188,6 +190,7 @@ public class Entity {
                 break;
         }
     }
+    public void move(String direction){}
     public void startDialogue(Entity entity, int setNum){
 
         gp.gameState = gp.dialogueState;

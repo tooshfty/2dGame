@@ -75,6 +75,9 @@ public class MON_GreenSlime extends Entity {
         onPath = true;
     }
 
+    /**
+     * THIS METHOD CAN BE REUSED FOR ANYTHING YOU WANT TO HAVE DROPS ENABLED FOR
+     */
     public void checkDrop(){
 
         //cast a die, random number

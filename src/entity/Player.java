@@ -67,9 +67,9 @@ public class Player extends Entity{
         //worldX = gp.tileSize * 23 - (gp.tileSize/2);
         //worldY = gp.tileSize * 21 - (gp.tileSize/2);
 
-        gp.currentMap = 0;
-        worldX = gp.tileSize * 12;
-        worldY = gp.tileSize * 8;
+        gp.currentMap = 2;
+        worldX = gp.tileSize * 9;
+        worldY = gp.tileSize * 20;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -111,6 +111,7 @@ public class Player extends Entity{
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Tent(gp));
         inventory.add(new OBJ_Lantern(gp));
+        inventory.add(new OBJ_Pickaxe(gp));
 
     }
 
@@ -170,6 +171,16 @@ public class Player extends Entity{
             attackLeft2 = setup("/player/boy_axe_left_2", gp.tileSize * 2, gp.tileSize);
             attackRight1 = setup("/player/boy_axe_right_1", gp.tileSize * 2, gp.tileSize);
             attackRight2 = setup("/player/boy_axe_right_2", gp.tileSize * 2, gp.tileSize);
+        }
+        if (currentWeapon.type == type_pickaxe){
+            attackUp1 = setup("/player/boy_pick_up_1", gp.tileSize, gp.tileSize * 2);
+            attackUp2 = setup("/player/boy_pick_up_2", gp.tileSize, gp.tileSize * 2);
+            attackDown1 = setup("/player/boy_pick_down_1", gp.tileSize, gp.tileSize * 2);
+            attackDown2 = setup("/player/boy_pick_down_2", gp.tileSize, gp.tileSize * 2);
+            attackLeft1 = setup("/player/boy_pick_left_1", gp.tileSize * 2, gp.tileSize);
+            attackLeft2 = setup("/player/boy_pick_left_2", gp.tileSize * 2, gp.tileSize);
+            attackRight1 = setup("/player/boy_pick_right_1", gp.tileSize * 2, gp.tileSize);
+            attackRight2 = setup("/player/boy_pick_right_2", gp.tileSize * 2, gp.tileSize);
         }
 
     }
@@ -442,12 +453,14 @@ public class Player extends Entity{
     public void interactNPC(int index){
 
 
-        if (gp.keyH.enterPressed) {
+        if (index != 999) {
 
-            if (index != 999){
+            if (gp.keyH.enterPressed){
                 attackCancel = true;
                 gp.npc[gp.currentMap][index].speak();
             }
+
+            gp.npc[gp.currentMap][index].move(direction);
         }
     }
 
@@ -523,6 +536,7 @@ public class Player extends Entity{
             //generate particle
             generateParticle(gp.iTile[gp.currentMap][i], gp.iTile[gp.currentMap][i]);
             if (gp.iTile[gp.currentMap][i].life == 0) {
+                //gp.iTile[gp.currentMap][i].checkDrop();
                 gp.iTile[gp.currentMap][i] = gp.iTile[gp.currentMap][i].getDestroyedForm();
             }
         }
@@ -556,7 +570,7 @@ public class Player extends Entity{
 
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.type == type_sword || selectedItem.type == type_axe) {
+            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe) {
 
                 currentWeapon = selectedItem;
                 attack = getAttack();
