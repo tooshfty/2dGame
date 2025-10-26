@@ -46,30 +46,19 @@ public class Player extends Entity{
     }
 
     public void setDefaultPositions() {
-        worldX = gp.tileSize * 23 - (gp.tileSize/2);
-        worldY = gp.tileSize * 21 - (gp.tileSize/2);
+
+        gp.currentMap = 3;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 26;
         direction = "down";
     }
-    public void restoreStatus() {
-        life = maxLife;
-        mana = maxMana;
-        speed = defaultSpeed;
-        invincible = false;
-        transparent = false;
-        attacking = false;
-        guarding = false;
-        knockback = false;
-        lightUpdated = true;
-    }
+
 
     public void setDefaultValues(){
 
-        //worldX = gp.tileSize * 23 - (gp.tileSize/2);
-        //worldY = gp.tileSize * 21 - (gp.tileSize/2);
-
-        gp.currentMap = 2;
-        worldX = gp.tileSize * 9;
-        worldY = gp.tileSize * 20;
+        gp.currentMap = 3;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 26;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -81,7 +70,7 @@ public class Player extends Entity{
         maxMana = 4;
         mana = maxMana;
         ammo = 10;
-        strength = 1;
+        strength = 5;
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
@@ -211,6 +200,18 @@ public class Player extends Entity{
             }
         }
         return currentShieldSlot;
+    }
+
+    public void restoreStatus() {
+        life = maxLife;
+        mana = maxMana;
+        speed = defaultSpeed;
+        invincible = false;
+        transparent = false;
+        attacking = false;
+        guarding = false;
+        knockback = false;
+        lightUpdated = true;
     }
 
     public BufferedImage setup(String imageName){
@@ -409,11 +410,13 @@ public class Player extends Entity{
         if (mana > maxMana) {
             mana = maxMana;
         }
-        if (life <= 0){
-            gp.ui.commandNum = -1; //sets the cursor to off to avoid instantly restarting if you died during combat
-            gp.stopMusic();
-            gp.playSE(12);
-            gp.gameState = gp.gameOverState;
+        if (!keyH.godModeOn) {
+            if (life <= 0) {
+                gp.ui.commandNum = -1; //sets the cursor to off to avoid instantly restarting if you died during combat
+                gp.stopMusic();
+                gp.playSE(12);
+                gp.gameState = gp.gameOverState;
+            }
         }
     }
 

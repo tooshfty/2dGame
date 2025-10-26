@@ -1,8 +1,6 @@
 package Main;
 
-import Main.monster.MON_GreenSlime;
-import Main.monster.MON_Orc;
-import Main.monster.MON_RedSlime;
+import Main.monster.*;
 import entity.Entity;
 import entity.NPC_Big_Rock;
 import entity.NPC_Merchant;
@@ -181,11 +179,26 @@ public class AssetSetter {
         //Map 2
         mapNum = 2;
         i = 0;
+        gp.monster[mapNum][i] = new MON_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 34;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 39;
+        i++;
+        gp.monster[mapNum][i] = new MON_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 36;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 25;
+        i++;
+        gp.monster[mapNum][i] = new MON_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 39;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 26;
+        i++;
 
         //Map 3
         mapNum = 3;
         i = 0;
-
+        gp.monster[mapNum][i] = new MON_Skeleton_Lord(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 23;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 16;
+        i++;
 
     }
 

@@ -31,6 +31,7 @@ public class OBJ_Chest extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
+
     }
 
     public void setLoot(Entity loot){

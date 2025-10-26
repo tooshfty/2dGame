@@ -72,6 +72,13 @@ public class CollisionChecker {
 
         int index = 999;
 
+        //use temporary direction when being knocked back
+        String direction = entity.direction;
+        if (entity.knockback){
+            direction = entity.knockbackDirection;
+        }
+
+
         for (int i = 0; i < gp.obj[1].length; i++){
 
             if (gp.obj[gp.currentMap][i] != null){
@@ -83,11 +90,7 @@ public class CollisionChecker {
                 gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;
                 gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
 
-                //use temporary direction when being knocked back
-                String direction = entity.direction;
-                if (entity.knockback){
-                    direction = entity.knockbackDirection;
-                }
+
                 switch (direction){
                     case "up":
                         entity.solidArea.y -= entity.speed;

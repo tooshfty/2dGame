@@ -34,7 +34,7 @@ public class Lighting {
 
 
         if (gp.player.currentLight == null){
-            g2.setColor(new Color(0,0,0,0.98f));
+            g2.setColor(new Color(0,0,0.05f,0.95f));
         }
         else {
             //get center x and y of the circle
@@ -46,18 +46,18 @@ public class Lighting {
             Color[] color = new Color[12];
             float[] fraction = new float[12];
 
-            color[0] = new Color(0,0,0,0f);
-            color[1] = new Color(0,0,0,0.42f);
-            color[2] = new Color(0,0,0,0.52f);
-            color[3] = new Color(0,0,0,0.61f);
-            color[4] = new Color(0,0,0,0.69f);
-            color[5] = new Color(0,0,0,0.76f);
-            color[6] = new Color(0,0,0,0.82f);
-            color[7] = new Color(0,0,0,0.87f);
-            color[8] = new Color(0,0,0,0.91f);
-            color[9] = new Color(0,0,0,0.94f);
-            color[10] = new Color(0,0,0,0.96f);
-            color[11] = new Color(0,0,0,0.98f);
+            color[0] = new Color(0,0,0.05f,0f);
+            color[1] = new Color(0,0,0.05f,0.42f);
+            color[2] = new Color(0,0,0.05f,0.52f);
+            color[3] = new Color(0,0,0.05f,0.61f);
+            color[4] = new Color(0,0,0.05f,0.69f);
+            color[5] = new Color(0,0,0.05f,0.76f);
+            color[6] = new Color(0,0,0.05f,0.82f);
+            color[7] = new Color(0,0,0.05f,0.87f);
+            color[8] = new Color(0,0,0.05f,0.91f);
+            color[9] = new Color(0,0,0.05f,0.92f);
+            color[10] = new Color(0,0,0.05f,0.93f);
+            color[11] = new Color(0,0,0.05f,0.94f);
 
             fraction[0] = 0f;
             fraction[1] = 0.4f;

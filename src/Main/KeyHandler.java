@@ -9,6 +9,7 @@ public class KeyHandler implements KeyListener {
     GamePanel gp;
     //Debug
     boolean showDebugText = false;
+    public boolean godModeOn = false;
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -318,6 +319,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE){
             spacePressed = true;
+        }
+        if (code == KeyEvent.VK_G){
+            godModeOn = true;
         }
 
     }

@@ -93,6 +93,7 @@ public class Entity {
     public Entity loot;
     public boolean opened = false;
     public int dialogueSet = 0;
+    public boolean enraged = false;
 
     //Counters
     public int spriteCounter = 0;
@@ -143,8 +144,14 @@ public class Entity {
     public int getRow() {
         return (worldY + solidArea.y)/gp.tileSize;
     }
-    public int getXDistance(Entity target){return Math.abs(worldX-target.worldX);}
-    public int getYDistance(Entity target){return Math.abs(worldY-target.worldY);}
+    public int getCenterX(){
+        return worldX + left1.getWidth()/2;
+    }
+    public int getCenterY(){
+        return worldY + up1.getHeight()/2;
+    }
+    public int getXDistance(Entity target){return Math.abs(getCenterX()-target.getCenterX());}
+    public int getYDistance(Entity target){return Math.abs(getCenterY()-target.getCenterY());}
     public int getTileDistance(Entity target){return (getXDistance(target) + getYDistance(target))/gp.tileSize;}
     public int getGoalCol(Entity target){return (target.worldX + target.solidArea.x)/gp.tileSize;}
     public int getGoalRow(Entity target){return (target.worldY + target.solidArea.y)/gp.tileSize;}
@@ -191,6 +198,30 @@ public class Entity {
         }
     }
     public void move(String direction){}
+    public void moveTowardPlayer(int interval){
+
+        actionLockCounter++;
+        if (actionLockCounter > interval){
+
+            if (getXDistance(gp.player)  > getYDistance(gp.player)){
+                if (gp.player.getCenterX() < getCenterX()){
+                    direction = "left";
+                }
+                else {
+                    direction = "right";
+                }
+            }
+            else if (getXDistance(gp.player) < getYDistance(gp.player)) {
+                if (gp.player.getCenterY() < getCenterY()){
+                    direction = "up";
+                }
+                else {
+                    direction = "down";
+                }
+            }
+            actionLockCounter = 0;
+        }
+    }
     public void startDialogue(Entity entity, int setNum){
 
         gp.gameState = gp.dialogueState;
@@ -246,6 +277,29 @@ public class Entity {
             case "right": oppositeDirection = "left"; break;
         }
         return oppositeDirection;
+    }
+    public void getRandomDirection(int interval){
+
+        actionLockCounter++;
+
+        if (actionLockCounter > interval) {
+            Random random = new Random();
+            int i = random.nextInt(100) + 1;
+
+            if (i <= 25) {
+                direction = "up";
+            }
+            if (i > 25 && i <= 50) {
+                direction = "down";
+            }
+            if (i > 50 && i <= 75) {
+                direction = "left";
+            }
+            if (i > 75 && i <= 100) {
+                direction = "right";
+            }
+            actionLockCounter = 0;
+        }
     }
     public void generateParticle(Entity generator, Entity target){
         Color color = generator.getParticleColor();
@@ -377,29 +431,7 @@ public class Entity {
             }
         }
     }
-    public void getRandomDirection(){
 
-        actionLockCounter++;
-
-        if (actionLockCounter == 120) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;
-
-            if (i <= 25) {
-                direction = "up";
-            }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0;
-        }
-    }
 
     public void checkAttack(int rate, int straight, int horizontal) {
 
@@ -409,22 +441,22 @@ public class Entity {
 
         switch (direction){
             case "up":
-                if (gp.player.worldY < worldY && yDistance < straight && xDistance < horizontal){
+                if (gp.player.getCenterY() < getCenterY() && yDistance < straight && xDistance < horizontal){
                     targetInRange = true;
                 }
                 break;
             case "down":
-                if (gp.player.worldY > worldY && yDistance < straight && xDistance < horizontal){
+                if (gp.player.getCenterY() > getCenterY() && yDistance < straight && xDistance < horizontal){
                     targetInRange = true;
                 }
                 break;
             case "left":
-                if (gp.player.worldX < worldX && yDistance < straight && xDistance < horizontal){
+                if (gp.player.getCenterX() < getCenterX() && xDistance < straight && yDistance < horizontal){
                     targetInRange = true;
                 }
                 break;
             case "right":
-                if (gp.player.worldX > worldX && yDistance < straight && xDistance < horizontal){
+                if (gp.player.getCenterX() > getCenterX() && xDistance < straight && yDistance < horizontal){
                     targetInRange = true;
                 }
                 break;
@@ -578,9 +610,9 @@ public class Entity {
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-        if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
+        if (worldX + gp.tileSize * 5 > gp.player.worldX - gp.player.screenX &&
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-                worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+                worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
 
             int tempScreenX = screenX;
@@ -593,7 +625,7 @@ public class Entity {
                         if (spriteNum == 2){image = up2;}
                     }
                     if (attacking) {
-                        tempScreenY = screenY - gp.tileSize;
+                        tempScreenY = screenY - up1.getHeight();
                         if (spriteNum == 1) {image = attackUp1;}
                         if (spriteNum == 2) {image = attackUp2;}
                     }
@@ -614,7 +646,7 @@ public class Entity {
                         if (spriteNum == 2){image = left2;}
                     }
                     if (attacking) {
-                        tempScreenX = screenX - gp.tileSize;
+                        tempScreenX = screenX - left1.getWidth();
                         if (spriteNum == 1) {image = attackLeft1;}
                         if (spriteNum == 2) {image = attackLeft2;}
                     }
