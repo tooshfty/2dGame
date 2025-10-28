@@ -83,7 +83,7 @@ public class Entity {
     public boolean attacking = false;
     public boolean alive = true;
     public boolean dying = false;
-    boolean hpBarOn = false;
+    public boolean hpBarOn = false;
     public boolean onPath = false;
     public boolean knockback = false;
     public String knockbackDirection;
@@ -94,6 +94,7 @@ public class Entity {
     public boolean opened = false;
     public int dialogueSet = 0;
     public boolean enraged = false;
+    public boolean boss;
 
     //Counters
     public int spriteCounter = 0;
@@ -103,7 +104,7 @@ public class Entity {
     public int actionLockCounter = 0;
     public int invincibleCounter = 0;
     int dyingCounter = 0;
-    int hpBarCounter;
+    public int hpBarCounter;
     public int shotAvailableCounter;
 
     //Typing
@@ -143,6 +144,13 @@ public class Entity {
     }
     public int getRow() {
         return (worldY + solidArea.y)/gp.tileSize;
+    }
+    public int getScreenX() {
+        return worldX - gp.player.worldX + gp.player.screenX;
+    }
+
+    public int getScreenY(){
+        return worldY - gp.player.worldY + gp.player.screenY;
     }
     public int getCenterX(){
         return worldX + left1.getWidth()/2;
@@ -604,19 +612,26 @@ public class Entity {
 
     }
 
-    public void draw(Graphics2D g2){
-
-        BufferedImage image = null;
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+    public boolean inCamera() {
+        boolean inCamera = false;
 
         if (worldX + gp.tileSize * 5 > gp.player.worldX - gp.player.screenX &&
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                 worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
+            inCamera = true;
+        }
+        return inCamera;
+    }
 
-            int tempScreenX = screenX;
-            int tempScreenY = screenY;
+    public void draw(Graphics2D g2){
+
+        BufferedImage image = null;
+
+        if (inCamera()){
+
+            int tempScreenX = getScreenX();
+            int tempScreenY = getScreenY();
 
             switch (direction) {
                 case "up":
@@ -625,7 +640,7 @@ public class Entity {
                         if (spriteNum == 2){image = up2;}
                     }
                     if (attacking) {
-                        tempScreenY = screenY - up1.getHeight();
+                        tempScreenY = getScreenY() - up1.getHeight();
                         if (spriteNum == 1) {image = attackUp1;}
                         if (spriteNum == 2) {image = attackUp2;}
                     }
@@ -646,7 +661,7 @@ public class Entity {
                         if (spriteNum == 2){image = left2;}
                     }
                     if (attacking) {
-                        tempScreenX = screenX - left1.getWidth();
+                        tempScreenX = getScreenX() - left1.getWidth();
                         if (spriteNum == 1) {image = attackLeft1;}
                         if (spriteNum == 2) {image = attackLeft2;}
                     }
@@ -662,27 +677,6 @@ public class Entity {
                     }
                     break;
             }
-
-            //monster hp bar
-            if (type == type_monster && hpBarOn) {
-
-                double oneScale = (double)gp.tileSize/maxLife;
-                double hpBarValue = oneScale * life;
-
-                g2.setColor(new Color(35,35,35));
-                g2.drawRect(screenX - 1,screenY - 16,gp.tileSize + 2,12);
-
-                g2.setColor(new Color(255, 0, 30));
-                g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
-
-                hpBarCounter++;
-
-                if (hpBarCounter > 600) {
-                    hpBarCounter = 0;
-                    hpBarOn = false;
-                }
-            }
-
 
             //set monster transparency when damaged
             if (invincible) {
@@ -701,7 +695,7 @@ public class Entity {
 
             //2 lines below draws a hitbox for non player entity
             g2.setColor(Color.red);
-            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+            g2.drawRect(getScreenX() + solidArea.x, getScreenY() + solidArea.y, solidArea.width, solidArea.height);
         }
     }
 

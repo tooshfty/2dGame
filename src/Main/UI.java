@@ -88,13 +88,13 @@ public class UI {
         //Play state
         if (gp.gameState == gp.playState){
             drawPlayerLife();
+            drawMonsterLife();
             drawMessage();
         }
         //Pause state
         if (gp.gameState == gp.pauseState) {
             drawPlayerLife();
             drawPauseScreen();
-
         }
         //Dialogue State
         if (gp.gameState == gp.dialogueState){
@@ -911,6 +911,7 @@ public class UI {
             g2.drawImage(heart_blank,x,y,null);
             i++;
             x+= gp.tileSize;
+
         }
 
         //reset
@@ -1082,6 +1083,55 @@ public class UI {
         int y = gp.screenHeight/2;
 
         g2.drawString(text, x,y);
+
+    }
+    public void drawMonsterLife(){
+
+
+        for (int i = 0; i < gp.monster[1].length; i++){
+            Entity monster = gp.monster[gp.currentMap][i];
+
+            if (monster != null && monster.inCamera()){
+
+                if (monster.hpBarOn && !monster.boss) {
+
+                    double oneScale = (double)gp.tileSize/monster.maxLife;
+                    double hpBarValue = oneScale * monster.life;
+
+                    g2.setColor(new Color(35,35,35));
+                    g2.drawRect(monster.getScreenX() - 1,monster.getScreenY() - 16,gp.tileSize + 2,12);
+
+                    g2.setColor(new Color(255, 0, 30));
+                    g2.fillRect(monster.getScreenX(), monster.getScreenY() - 15, (int)hpBarValue, 10);
+
+                    monster.hpBarCounter++;
+
+                    if (monster.hpBarCounter > 600) {
+                        monster.hpBarCounter = 0;
+                        monster.hpBarOn = false;
+                    }
+                } else if (monster.boss) {
+
+                    double oneScale = (double)gp.tileSize*8/monster.maxLife;
+                    double hpBarValue = oneScale * monster.life;
+
+                    int x = gp.screenWidth/2 - gp.tileSize*4;
+                    int y = gp.screenHeight * 10;
+
+                    g2.setColor(new Color(35,35,35));
+                    g2.drawRect(x-1,y-1,gp.tileSize*8 + 2,22);
+
+                    g2.setColor(new Color(255, 0, 30));
+                    g2.fillRect(x, y, (int)hpBarValue, 20);
+
+                    g2.setFont(g2.getFont().deriveFont(Font.BOLD,24f));
+                    g2.setColor(Color.white);
+                    g2.drawString(monster.name, x+4, y-10);
+
+                }
+            }
+        }
+
 
     }
 

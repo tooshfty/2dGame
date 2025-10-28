@@ -313,8 +313,7 @@ public class GamePanel extends JPanel implements Runnable{
             Collections.sort(entityList, new Comparator<Entity>() {
                 @Override
                 public int compare(Entity e1, Entity e2) {
-                    int result = Integer.compare(e1.worldY,e2.worldY);
-                    return result;
+                    return Integer.compare(e1.worldY,e2.worldY);
                 }
             });
 
@@ -325,6 +324,7 @@ public class GamePanel extends JPanel implements Runnable{
             //empty entity list
             entityList.clear();
 
+            //Environment and lighting
             eManager.draw(g2);
 
             //miniMap
