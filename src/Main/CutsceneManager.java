@@ -166,8 +166,8 @@ public class CutsceneManager {
             alpha += 0.005f;
             if (alpha > 1f){
                 alpha = 1f;
-                drawBlackBackground(alpha);
             }
+            drawBlackBackground(alpha);
             if (alpha == 1f){
                 alpha = 0;
                 scenePhase++;
@@ -224,7 +224,24 @@ public class CutsceneManager {
             //scrolling credits
             y--;
             drawString(1f,38f,y,endCredit,40);
+
+            int textHeight = getTextHeight(endCredit, 40);
+            if (y + textHeight < 0){
+                scenePhase++;
+            }
         }
+        if (scenePhase == 9){
+
+            drawBlackBackground(1f);
+            sceneNum = NA;
+            scenePhase = 0;
+            alpha = 0f;
+            counter = 0;
+            gp.ui.npc = null;
+            gp.ui.titleScreenState = 0;
+            gp.gameState = gp.titleState;
+        }
+
     }
 
     public boolean counterReached(int target){
@@ -260,4 +277,7 @@ public class CutsceneManager {
         }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1f));
     }
+private int getTextHeight(String text, int lineHeight){
+    return text.split("\n").length * lineHeight;
+}
 }

@@ -13,16 +13,24 @@ import java.util.ArrayList;
 
 public class UI {
 
+    // Core References
     GamePanel gp;
     Graphics2D g2;
+
+    // Fonts & HUD Assets
     public Font maruMonica, purisaB;
-    //BufferedImage keyImage;
     BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
+
+    // Messaging & Dialogue
     public boolean messageOn = false;
     ArrayList<String> message = new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
     public boolean gameFinished = false;
     public String currentDialogue = "";
+    int charIndex = 0;
+    String combinedText = "";
+
+    // Menu & Navigation State
     public int commandNum = 0;
     public int titleScreenState = 0; //0: first screen, 1: second screen
     public int playerSlotCol = 0;
@@ -32,8 +40,6 @@ public class UI {
     int subState = 0;
     int counter = 0;
     public Entity npc;
-    int charIndex = 0;
-    String combinedText = "";
 
 
 

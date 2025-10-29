@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable{
-
+    // Tile & Screen Settings
     final int ogTileSize = 16; // 16x16 tile
     final int scale = 3;
 
@@ -29,23 +29,23 @@ public class GamePanel extends JPanel implements Runnable{
     public final int screenWidth = tileSize * maxScreenCol; // 960 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
-    //WORLD SETTINGS
+    // World & Map Settings
     public  int maxWorldCol;
     public  int maxWorldRow;
     public final int maxMap = 10;
     public int currentMap = 1;
 
-    //full screen
+    // Display & Rendering Buffers
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     Graphics2D g2;
     public boolean fullScreenOn = false;
 
-    //FPS
+    // Performance Controls
     int FPS = 60;
 
-    //System
+    // Core Systems & Managers
     public KeyHandler keyH = new KeyHandler(this);
     public TileManager tileM = new TileManager(this);
     Sound music = new Sound();
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
     public CutsceneManager csManager = new CutsceneManager(this);
 
 
-    //Entity and object
+    // Entity Collections
     public Player player = new Player(this,keyH);
     public Entity[][] obj = new Entity[maxMap][20];
     public Entity[][] npc = new Entity[maxMap][10];
@@ -75,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable{
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
 
-    //GAMESTATE
+    // Game State Tracking
     public int gameState;
     public final int titleState = 0;
     public final int playState = 1;
@@ -90,11 +90,10 @@ public class GamePanel extends JPanel implements Runnable{
     public final int mapState = 10;
     public final int cutsceneState = 11;
 
-    //booleans
+    // Gameplay Flags
     public boolean bossBattleOn = false;
 
-
-    //AREA
+    // Area Tracking
     public int currentArea;
     public int nextArea;
     public final int outside = 50;

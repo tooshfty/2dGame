@@ -12,37 +12,40 @@ import java.util.Random;
 
 public class Entity {
 
+
+    // Core Reference
     GamePanel gp;
+
+    // World Position & Movement
     public int worldX, worldY;
     public int speed;
+    public String direction = "down";
+    public int spriteNum = 1;
 
 
+    // Sprite Assets
     public BufferedImage up1, up2, down1, down2,
             left1, left2, right1, right2;
     public BufferedImage attackUp1, attackUp2, attackDown1,
             attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public BufferedImage guardUp, guardDown, guardLeft, guardRight;
-    public String direction = "down";
 
 
-    public int spriteNum = 1;
-
-
+    // Collision Areas
     public Rectangle solidArea = new Rectangle(0,0,48,48);
     public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
-
     public boolean invincible = false;
 
 
-    //first index is dialogue set, second index is dialogue index
-    public String[][] dialogues = new String[20][20];
+    // Dialogue & Linked Entities
+    public String[][] dialogues = new String[20][20]; //first index is dialogue set, second index is dialogue index
     public int dialogueIndex = 0;
     public Entity attacker;
     public Entity linkedEntity;
 
-    //Character status
+    // Character Stats
     public int maxLife;
     public int life;
     public int maxMana;
@@ -57,28 +60,34 @@ public class Entity {
     public int coin;
     public int motion1_duration;
     public int motion2_duration;
+    public int defaultSpeed;
+
+    // Equipment & Inventory
     public Entity currentWeapon;
     public Entity currentShield;
     public Projectile projectile;
     public Entity currentLight;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
+    public boolean stackable = false;
+    public int amount = 1;
+
+    // Combat Values & Economy
     public int knockbackPower;
     public int useCost;
     public int price;
     public int ammo;
     public int value;
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int maxInventorySize = 20;
-    public int defaultSpeed;
-    public boolean stackable = false;
-    public int amount = 1;
-    public boolean guarding = false;
-    public boolean transparent = false;
     public int attackValue;
     public int defenseValue;
+
+    // Visuals & Description
     public String description = "";
     public int lightRadius;
     public BufferedImage image, image2, image3;
     public String name;
+
+    // Collision & Rendering Flags
     public boolean collision = false;
     public boolean attacking = false;
     public boolean alive = true;
@@ -87,8 +96,10 @@ public class Entity {
     public boolean onPath = false;
     public boolean knockback = false;
     public String knockbackDirection;
+    public boolean guarding = false;
+    public boolean transparent = false;
 
-    //states
+    // Additional State Flags
     public boolean offBalance;
     public Entity loot;
     public boolean opened = false;
@@ -99,7 +110,7 @@ public class Entity {
     public boolean temp = false;
     public boolean drawing = true;
 
-    //Counters
+    // Counters
     public int spriteCounter = 0;
     public int guardCounter = 0;
     int offBalanceCounter = 0;
@@ -110,7 +121,7 @@ public class Entity {
     public int hpBarCounter;
     public int shotAvailableCounter;
 
-    //Typing
+    // Typing
     public int type; // 0 = player, 1 = npc, 2 = monster
     public final int type_player = 0;
     public final int type_npc = 1;
@@ -123,7 +134,6 @@ public class Entity {
     public final int type_obstacle = 8;
     public final int type_light = 9;
     public final int type_pickaxe = 10;
-
 
     public Entity(GamePanel gp){
 
@@ -151,7 +161,6 @@ public class Entity {
     public int getScreenX() {
         return worldX - gp.player.worldX + gp.player.screenX;
     }
-
     public int getScreenY(){
         return worldY - gp.player.worldY + gp.player.screenY;
     }
@@ -576,7 +585,6 @@ public class Entity {
 
 
     }
-
     public void damagePlayer(int attack){
 
         if (!gp.player.invincible){
@@ -621,7 +629,6 @@ public class Entity {
         }
 
     }
-
     public boolean inCamera() {
         boolean inCamera = false;
 
@@ -633,7 +640,6 @@ public class Entity {
         }
         return inCamera;
     }
-
     public void draw(Graphics2D g2){
 
         BufferedImage image = null;
@@ -708,7 +714,6 @@ public class Entity {
             //g2.drawRect(getScreenX() + solidArea.x, getScreenY() + solidArea.y, solidArea.width, solidArea.height);
         }
     }
-
     public void dyingAnimation(Graphics2D g2)  {
 
         dyingCounter++;
@@ -744,13 +749,9 @@ public class Entity {
             alive = false;
         }
     }
-
     public void changeAlpha(Graphics2D g2, float alphaValue) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
     }
-
-
-
     public BufferedImage setup(String imagePath, int width, int height){
 
         UtilityTool utool = new UtilityTool();

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class DataStorage implements Serializable {
 
-    //player stats
+    // Player stats
     int level;
     int maxLife;
     int life;
@@ -17,13 +17,15 @@ public class DataStorage implements Serializable {
     int nextLevelExp;
     int coin;
 
-    //player inventory
+    // Player inventory
     ArrayList<String> itemNames = new ArrayList<>();
     ArrayList<Integer> itemAmounts = new ArrayList<>();
+
+    // Equipment Slots
     int currentWeaponSlot;
     int currentShieldSlot;
 
-    //map objects
+    // Map objects
     String[][] mapObjectNames;
     int[][] mapObjectWorldX;
     int[][] mapObjectWorldY;
