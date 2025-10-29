@@ -66,6 +66,12 @@ public class UI {
 
     }
 
+    public void resetDialogueText() {
+        currentDialogue = "";
+        combinedText = "";
+        charIndex = 0;
+    }
+
     public void addMessage(String text){
         message.add(text);
         messageCounter.add(0);
@@ -626,10 +632,10 @@ public class UI {
         int x = gp.tileSize * 3;
         int y = gp.tileSize / 2;
         int width = gp.screenWidth - (gp.tileSize * 6);
-        int height = gp.tileSize * 5;
+        int height = gp.tileSize * 4;
         drawSubWindow(x,y,width,height);
 
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,32));
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN,32F));
         x += gp.tileSize ;
         y += gp.tileSize;
 
@@ -646,11 +652,13 @@ public class UI {
                 currentDialogue = combinedText;
                 charIndex++;
             }
+
             if (gp.keyH.enterPressed){
                 charIndex = 0;
                 combinedText = "";
 
-                if (gp.gameState == gp.dialogueState){
+                if (gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState){
+
                     npc.dialogueIndex++;
                     gp.keyH.enterPressed = false;
                 }
@@ -662,6 +670,9 @@ public class UI {
 
             if (gp.gameState == gp.dialogueState){
                 gp.gameState = gp.playState;
+            }
+            if (gp.gameState == gp.cutsceneState){
+                gp.csManager.scenePhase++;
             }
         }
 

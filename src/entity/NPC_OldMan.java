@@ -95,12 +95,13 @@ public class NPC_OldMan extends Entity{
 
         //character specific dialogue
         facePlayer();
-        startDialogue(this,dialogueSet);
-        dialogueSet++;
-        if (dialogues[dialogueSet][0] == null){
 
-            dialogueSet--;
+        dialogueSet++;
+        if (dialogueSet >= dialogues.length ||dialogues[dialogueSet][0] == null){
+            dialogueSet = 0;
         }
+
+        startDialogue(this,dialogueSet);
         //onPath = true;
     }
 

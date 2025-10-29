@@ -39,7 +39,7 @@ public class KeyHandler implements KeyListener {
             pauseState(code);
         }
         //dialogue state
-        else if (gp.gameState == gp.dialogueState){
+        else if (gp.gameState == gp.dialogueState || gp.gameState == gp.cutsceneState){
             dialogueState(code);
         }
         //Character state

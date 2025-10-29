@@ -150,13 +150,13 @@ public class NPC_Big_Rock extends Entity{
     public void speak() {
 
         facePlayer();
-        startDialogue(this,dialogueSet);
-        dialogueSet++;
-        if (dialogues[dialogueSet][0] == null){
 
-            dialogueSet--;
+        dialogueSet++;
+        if (dialogueSet >= dialogues.length ||dialogues[dialogueSet][0] == null){
+            dialogueSet = 0;
         }
 
+        startDialogue(this,dialogueSet);
     }
 
 }

@@ -1,5 +1,6 @@
 package Main;
 
+import data.Progress;
 import entity.Entity;
 
 import java.awt.*;
@@ -90,6 +91,10 @@ public class EventHandler {
             else if (hit(3,26,41,"any")){
                 teleport(2,8,7,gp.dungeon);
             }
+            //Start skeleton lord cutscene
+            else if (hit(3,25,27,"any")){
+                skeletonLord();
+            }
 
         }
 
@@ -165,6 +170,15 @@ public class EventHandler {
             gp.player.attackCancel = true;
             entity.speak();
         }
+    }
+
+    public void skeletonLord(){
+
+        if (!gp.bossBattleOn && !Progress.skeletonLordDefeated){
+            gp.gameState = gp.cutsceneState;
+            gp.csManager.sceneNum = gp.csManager.skeletonLord;
+        }
+
     }
 
 

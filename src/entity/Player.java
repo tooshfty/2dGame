@@ -58,7 +58,7 @@ public class Player extends Entity{
 
         gp.currentMap = 2;
         worldX = gp.tileSize * 10;
-        worldY = gp.tileSize * 9;
+        worldY = gp.tileSize * 10;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -719,7 +719,10 @@ public class Player extends Entity{
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
 
-        g2.drawImage(image, tempScreenX, tempScreenY, null);
+        if (drawing){
+            g2.drawImage(image, tempScreenX, tempScreenY, null);
+        }
+
 
         //reset transparency
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));

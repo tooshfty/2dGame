@@ -95,6 +95,9 @@ public class Entity {
     public int dialogueSet = 0;
     public boolean enraged = false;
     public boolean boss;
+    public boolean sleep = false;
+    public boolean temp = false;
+    public boolean drawing = true;
 
     //Counters
     public int spriteCounter = 0;
@@ -234,7 +237,10 @@ public class Entity {
 
         gp.gameState = gp.dialogueState;
         gp.ui.npc = entity;
-        dialogueSet = setNum;
+        gp.ui.resetDialogueText();
+        entity.dialogueSet = setNum;
+        entity.dialogueIndex = 0;
+
     }
     public void interact() {
 
@@ -340,85 +346,89 @@ public class Entity {
     }
     public void update(){
 
-        if (knockback){
+        if(!sleep){
 
-            checkCollision();
+            if (knockback){
 
-            if (collisionOn){
-                knockbackCounter = 0;
-                knockback = false;
-                speed = defaultSpeed;
-            } else if (!collisionOn) {
-                switch (knockbackDirection){
-                    case "up":
-                        worldY -= speed;
-                        break;
-                    case "down":
-                        worldY += speed;
-                        break;
-                    case "left":
-                        worldX -= speed;
-                        break;
-                    case "right":
-                        worldX += speed;
-                        break;
+                checkCollision();
+
+                if (collisionOn){
+                    knockbackCounter = 0;
+                    knockback = false;
+                    speed = defaultSpeed;
+                } else if (!collisionOn) {
+                    switch (knockbackDirection){
+                        case "up":
+                            worldY -= speed;
+                            break;
+                        case "down":
+                            worldY += speed;
+                            break;
+                        case "left":
+                            worldX -= speed;
+                            break;
+                        case "right":
+                            worldX += speed;
+                            break;
+                    }
+                }
+                knockbackCounter++;
+                if (knockbackCounter == 5){
+                    knockbackCounter = 0;
+                    knockback = false;
+                    speed = defaultSpeed;
+                }
+            } else if (attacking) {
+                attacking();
+            } else {
+                setAction();
+                checkCollision();
+                if (!collisionOn) {
+                    switch (direction) {
+                        case "up":
+                            worldY -= speed;
+                            break;
+                        case "down":
+                            worldY += speed;
+                            break;
+                        case "left":
+                            worldX -= speed;
+                            break;
+                        case "right":
+                            worldX += speed;
+                            break;
+                    }
+                }
+                spriteCounter++;
+                if (spriteCounter > 12) {
+                    if (spriteNum == 1) {
+                        spriteNum = 2;
+                    } else if (spriteNum == 2) {
+                        spriteNum = 1;
+                    }
+                    spriteCounter = 0;
                 }
             }
-            knockbackCounter++;
-            if (knockbackCounter == 5){
-                knockbackCounter = 0;
-                knockback = false;
-                speed = defaultSpeed;
-            }
-        } else if (attacking) {
-            attacking();
-        } else {
-            setAction();
-            checkCollision();
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up":
-                        worldY -= speed;
-                        break;
-                    case "down":
-                        worldY += speed;
-                        break;
-                    case "left":
-                        worldX -= speed;
-                        break;
-                    case "right":
-                        worldX += speed;
-                        break;
+
+            if (invincible) {
+                invincibleCounter++;
+                if (invincibleCounter > 40) {
+                    invincible = false;
+                    invincibleCounter = 0;
                 }
             }
-            spriteCounter++;
-            if (spriteCounter > 12) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 1;
+            if (shotAvailableCounter < 30) {
+                shotAvailableCounter++;
+            }
+            if (offBalance){
+                offBalanceCounter++;
+                if (offBalanceCounter > 60){
+                    offBalance = false;
+                    offBalanceCounter = 0;
                 }
-                spriteCounter = 0;
             }
         }
 
-        if (invincible) {
-            invincibleCounter++;
-            if (invincibleCounter > 40) {
-                invincible = false;
-                invincibleCounter = 0;
-            }
-        }
-        if (shotAvailableCounter < 30) {
-            shotAvailableCounter++;
-        }
-        if (offBalance){
-            offBalanceCounter++;
-            if (offBalanceCounter > 60){
-                offBalance = false;
-                offBalanceCounter = 0;
-            }
-        }
     }
 
     public void checkStopChasing(Entity target, int distance, int rate){
