@@ -115,7 +115,9 @@ public class Lighting {
         }
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(50f));
-        g2.drawString(situation,800,500);
+        if (gp.currentArea == gp.outside) {
+            g2.drawString(situation, 800, 500);
+        }
     }
 
     /** for now this has same functionality as having it inside the update method, but id like to add

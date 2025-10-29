@@ -74,10 +74,11 @@ public class CutsceneManager {
             //search the boss
             for (int i = 0; i < gp.monster[1].length; i++){
 
-                if (gp.monster[gp.currentMap][i] != null && gp.monster[gp.currentMap][i].name == MON_Skeleton_Lord.monName){
+                if (gp.monster[gp.currentMap][i] != null && gp.monster[gp.currentMap][i].name.equals(MON_Skeleton_Lord.monName)){
 
                     gp.monster[gp.currentMap][i].sleep = false;
                     gp.ui.npc = gp.monster[gp.currentMap][i];
+                    gp.ui.resetDialogueText();
                     scenePhase++;
                     break;
                 }
@@ -87,7 +88,6 @@ public class CutsceneManager {
 
             //boss speaks
             gp.ui.drawDialogueState();
-            scenePhase++;
         }
         if (scenePhase == 4){
 

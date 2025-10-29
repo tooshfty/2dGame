@@ -75,10 +75,18 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_R){
             switch (gp.currentMap){
                 case 0:
-                    gp.tileM.loadMap("/maps/worldV3.txt",0);
+                    gp.tileM.loadMap("/maps/worldmap.txt",0);
                     break;
                 case 1:
-                    gp.tileM.loadMap("/maps/interior01.txt",1);
+                    gp.tileM.loadMap("/maps/indoor01.txt",1);
+                    break;
+                case 2:
+                    gp.tileM.loadMap("/maps/dungeon01.txt",2);
+                    break;
+                case 3:
+                    gp.tileM.loadMap("/maps/dungeon02.txt",3);
+                    break;
+
             }
         }
     }
@@ -334,7 +342,8 @@ public class KeyHandler implements KeyListener {
     }
     public void dialogueState(int code){
         if (code == KeyEvent.VK_ENTER){
-            gp.gameState = gp.playState;
+            //gp.gameState = gp.playState;
+            enterPressed = true;
         }
     }
     public void characterState(int code){
