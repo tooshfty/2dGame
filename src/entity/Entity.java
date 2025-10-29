@@ -704,8 +704,8 @@ public class Entity {
             changeAlpha(g2,1f);
 
             //2 lines below draws a hitbox for non player entity
-            g2.setColor(Color.red);
-            g2.drawRect(getScreenX() + solidArea.x, getScreenY() + solidArea.y, solidArea.width, solidArea.height);
+            //g2.setColor(Color.red);
+            //g2.drawRect(getScreenX() + solidArea.x, getScreenY() + solidArea.y, solidArea.width, solidArea.height);
         }
     }
 

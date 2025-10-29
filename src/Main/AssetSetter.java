@@ -1,6 +1,7 @@
 package Main;
 
 import Main.monster.*;
+import data.Progress;
 import entity.Entity;
 import entity.NPC_Big_Rock;
 import entity.NPC_Merchant;
@@ -101,6 +102,10 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize * 25;
         gp.obj[mapNum][i].worldY = gp.tileSize * 15;
         i++;
+        gp.obj[mapNum][i] = new OBJ_Blue_Heart(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize * 25;
+        gp.obj[mapNum][i].worldY = gp.tileSize * 8;
+        i++;
 
 
     }
@@ -200,10 +205,12 @@ public class AssetSetter {
         //Map 3
         mapNum = 3;
         i = 0;
-        gp.monster[mapNum][i] = new MON_Skeleton_Lord(gp);
-        gp.monster[mapNum][i].worldX = gp.tileSize * 23;
-        gp.monster[mapNum][i].worldY = gp.tileSize * 16;
-        i++;
+        if (!Progress.skeletonLordDefeated) {
+            gp.monster[mapNum][i] = new MON_Skeleton_Lord(gp);
+            gp.monster[mapNum][i].worldX = gp.tileSize * 23;
+            gp.monster[mapNum][i].worldY = gp.tileSize * 16;
+            i++;
+        }
 
     }
 

@@ -56,21 +56,21 @@ public class Player extends Entity{
 
     public void setDefaultValues(){
 
-        gp.currentMap = 0;
-        worldX = gp.tileSize * 20;
-        worldY = gp.tileSize * 20;
+        gp.currentMap = 3;
+        worldX = gp.tileSize * 25;
+        worldY = gp.tileSize * 9;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
 
         //player status
-        level = 1;
-        maxLife = 6;
+        level = 5;
+        maxLife = 16;
         life = maxLife;
-        maxMana = 4;
+        maxMana = 14;
         mana = maxMana;
         ammo = 10;
-        strength = 5;
+        strength = 25;
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
@@ -729,8 +729,8 @@ public class Player extends Entity{
 
         //DEBUG
         // Uncomment to see the player hitbox for testing
-        g2.setColor(Color.red);
-        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+        //g2.setColor(Color.red);
+        //g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
         //uncomment to see player invincibility timer
         //g2.setFont(new Font("Arial", Font.PLAIN, 26));
