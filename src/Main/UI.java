@@ -987,12 +987,19 @@ public class UI {
             if (commandNum == 1) {
                 g2.drawString(">",x-gp.tileSize,y);
             }
+            text = "Test Game";
+            x = getXForCenteredText(text);
+            y += gp.tileSize;
+            g2.drawString(text, x , y);
+            if (commandNum == 2) {
+                g2.drawString(">",x-gp.tileSize,y);
+            }
 
             text = "Quit Game";
             x = getXForCenteredText(text);
             y += gp.tileSize;
             g2.drawString(text, x , y);
-            if (commandNum == 2) {
+            if (commandNum == 3) {
                 g2.drawString(">",x-gp.tileSize,y);
             }
         }

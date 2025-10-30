@@ -56,7 +56,7 @@ public class Projectile extends Entity{
                 break;
         }
         spriteCounter++;
-        if (spriteCounter > 12) {
+        if (spriteCounter > 6) {
             spriteNum = spriteNum == 1 ? 2 : 1;
             spriteCounter = 0;
         }
