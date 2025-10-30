@@ -27,7 +27,7 @@ public class TileManager {
         this.gp = gp;
 
         //READ TITLE DATA FILE
-        InputStream is = getClass().getResourceAsStream("/maps/tiledata.txt");
+        InputStream is = getClass().getResourceAsStream("/maps/tiledata2.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
         //Getting tile names and collision info from file
@@ -66,6 +66,7 @@ public class TileManager {
         loadMap("/maps/indoor01.txt",1);
         loadMap("/maps/dungeon01.txt",2);
         loadMap("/maps/dungeon02.txt",3);
+        loadMap("/maps/training.txt",9);
 
     }
 

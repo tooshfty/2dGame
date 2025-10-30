@@ -47,7 +47,7 @@ public class Player extends Entity{
 
     public void setDefaultPositions() {
 
-        gp.currentMap = 3;
+        gp.currentMap = 0;
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 26;
         direction = "down";
@@ -56,9 +56,9 @@ public class Player extends Entity{
 
     public void setDefaultValues(){
 
-        gp.currentMap = 3;
+        gp.currentMap = 9;
         worldX = gp.tileSize * 25;
-        worldY = gp.tileSize * 9;
+        worldY = gp.tileSize * 25;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";

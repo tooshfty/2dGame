@@ -16,7 +16,7 @@ public class OBJ_Fireball extends Projectile {
 
         name = objName;
         speed = 5;
-        maxLife = 80;
+        maxLife = 80; //divide by 10 gets you tiles traveled
         life = maxLife;
         attack = 1;
         useCost = 1;

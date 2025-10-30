@@ -18,6 +18,8 @@ public class Projectile extends Entity{
         this.alive = alive;
         this.user = user;
         this.life = this.maxLife;
+        this.spriteCounter = 0;
+        this.spriteNum = 1;
     }
     public void update() {
 
@@ -53,6 +55,11 @@ public class Projectile extends Entity{
                 worldX += speed;
                 break;
         }
+        spriteCounter++;
+        if (spriteCounter > 12) {
+            spriteNum = spriteNum == 1 ? 2 : 1;
+            spriteCounter = 0;
+        }
         life--;
         if (life <= 0) {
             alive = false;
@@ -61,8 +68,7 @@ public class Projectile extends Entity{
 
     public boolean haveResource(Entity user) {
 
-        boolean haveResource = false;
-        return haveResource;
+        return false;
     }
 
     public void subtractResource(Entity user) {

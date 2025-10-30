@@ -121,6 +121,7 @@ public class Entity {
     public int hpBarCounter;
     public int shotAvailableCounter;
 
+
     // Typing
     public int type; // 0 = player, 1 = npc, 2 = monster
     public final int type_player = 0;
@@ -417,6 +418,7 @@ public class Entity {
                     }
                     spriteCounter = 0;
                 }
+
             }
 
             if (invincible) {
@@ -681,6 +683,7 @@ public class Entity {
                         if (spriteNum == 1) {image = attackLeft1;}
                         if (spriteNum == 2) {image = attackLeft2;}
                     }
+
                     break;
                 case "right":
                     if (!attacking){
