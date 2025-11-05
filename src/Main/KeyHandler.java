@@ -320,6 +320,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code==KeyEvent.VK_P){
             gp.gameState = gp.pauseState;
+            if (gp.currentMap == gp.tileM.TESTING_MAP){
+                gp.ui.resetMonsterSpawnMenu();
+            }
         }
         if (code == KeyEvent.VK_ENTER){
             enterPressed = true;
@@ -360,19 +363,22 @@ public class KeyHandler implements KeyListener {
 
         if (gp.currentMap == gp.tileM.TESTING_MAP) {
             if (gp.ui.spawnSubState == gp.ui.SPAWN_NAVIGATE){
+                if (code == KeyEvent.VK_ENTER){
+                    enterPressed = true;
+                }
                 monsterInventory(code);
             } else if (gp.ui.spawnSubState == gp.ui.SPAWN_QTY){
                 if (code == KeyEvent.VK_ENTER) {
                     enterPressed = true;
                 }
-                if (code == KeyEvent.VK_LEFT) {
+                if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
                     leftPressed = true;
                 }
-                if (code == KeyEvent.VK_RIGHT) {
+                if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
                     rightPressed = true;
                 }
                 if (code == KeyEvent.VK_ESCAPE) {
-                    escapePressed = true; // if you have this
+                    escapePressed = true;
                 }
             }
 

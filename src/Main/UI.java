@@ -46,7 +46,6 @@ public class UI {
     static final int SPAWN_QTY = 1;
     int subState = 0;
     int spawnSubState = SPAWN_NAVIGATE;
-    private boolean spawnQtyMode = false;
     private int spawnQty = 1;
     private static final int SPAWN_QTY_MIN = 1;
     private static final int SPAWN_QTY_MAX = 5;
@@ -82,6 +81,25 @@ public class UI {
         Entity bronzeCoin = new OBJ_Coin_Bronze(gp);
         coin = bronzeCoin.down1;
 
+    }
+
+    public void resetMonsterSpawnMenu() {
+        spawnSubState = SPAWN_NAVIGATE;
+        spawnQty = SPAWN_QTY_MIN;
+
+        // Clamp the selection cursor so it always points to a valid registry entry.
+        int maxIndex = MonsterRegistry.size() - 1;
+        if (maxIndex < 0) {
+            monsterSlotCol = 0;
+            monsterSlotRow = 0;
+            return;
+        }
+
+        int cursorIndex = getItemIndexOnSlot(monsterSlotCol, monsterSlotRow);
+        if (cursorIndex > maxIndex) {
+            monsterSlotCol = 0;
+            monsterSlotRow = 0;
+        }
     }
 
     public void resetDialogueText() {
@@ -1091,18 +1109,23 @@ public class UI {
         int slotSize = gp.tileSize + 3;
 
         int count = MonsterRegistry.size();
-        for (int i = 0; i < count; i++) {
-            var meta = MonsterRegistry.get(i);
-            if (meta != null) {
-                var icon = MonsterIconCache.getIcon(gp, meta.key());
-                if (icon != null) {
-                    g2.drawImage(icon, slotX, slotY, gp.tileSize, gp.tileSize, null);
-                } else {
-                    g2.drawString(meta.displayName(), slotX + 6, slotY + gp.tileSize/2 + 6);
+        if (count == 0) {
+            g2.setFont(g2.getFont().deriveFont(20F));
+            g2.drawString("No monsters registered", slotXStart, slotYStart + gp.tileSize);
+        }else {
+            for (int i = 0; i < count; i++) {
+                var meta = MonsterRegistry.get(i);
+                if (meta != null) {
+                    var icon = MonsterIconCache.getIcon(gp, meta.key());
+                    if (icon != null) {
+                        g2.drawImage(icon, slotX, slotY, gp.tileSize, gp.tileSize, null);
+                    } else {
+                        g2.drawString(meta.displayName(), slotX + 6, slotY + gp.tileSize / 2 + 6);
+                    }
                 }
+                slotX += slotSize;
+                if (i == 4 || i == 9 || i == 14) { slotX = slotXStart; slotY += slotSize; }
             }
-            slotX += slotSize;
-            if (i == 4 || i == 9 || i == 14) { slotX = slotXStart; slotY += slotSize; }
         }
 
         // 3) CURSOR HIGHLIGHT (show during both substates)
@@ -1131,6 +1154,11 @@ public class UI {
                 g2.drawString(line, textX, textY);
                 textY += 32;
             }
+            g2.setFont(g2.getFont().deriveFont(18F));
+            String hint = (spawnSubState == SPAWN_QTY)
+                    ? "Confirm quantity with Enter"
+                    : "Press Enter to choose quantity";
+            g2.drawString(hint, textX, dFrameY + dFrameHeight - 24);
         }
 
         // 5) QTY OVERLAY (ONLY when sub-state is QTY)
@@ -1155,12 +1183,11 @@ public class UI {
     public void updateSpawnMenu() {
         // Debounce-friendly: consume keys you use
         if (spawnSubState == SPAWN_NAVIGATE) {
-            // Cursor movement works as you already have (Up/Down/Left/Right) — leave that code where it is.
             // Here, only handle the Enter transition into QTY mode:
             if (gp.keyH.enterPressed) {
                 int idx = getItemIndexOnSlot(monsterSlotCol, monsterSlotRow);
                 if (idx >= 0 && idx < MonsterRegistry.size()) {
-                    spawnQty = 1;
+                    spawnQty = SPAWN_QTY_MIN;
                     spawnSubState = SPAWN_QTY;
                 }
                 gp.keyH.enterPressed = false;
@@ -1181,10 +1208,12 @@ public class UI {
                 }
                 gp.keyH.enterPressed = false;
                 spawnSubState = SPAWN_NAVIGATE;
+                spawnQty = SPAWN_QTY_MIN;
             }
             // If you have a back/cancel key in KeyHandler, use it here:
             if (gp.keyH.escapePressed) {
                 spawnSubState = SPAWN_NAVIGATE;
+                spawnQty = SPAWN_QTY_MIN;
                 gp.keyH.escapePressed = false;
             }
         }

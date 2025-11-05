@@ -31,7 +31,10 @@ public class MON_Skeleton_Lord extends Entity {
         motion1_duration = 25;
         motion2_duration = 50;
         knockbackPower = 5;
-        sleep = true;
+        if (gp.currentMap != gp.tileM.TESTING_MAP){
+            sleep = true;
+        }
+
 
 
         int size = gp.tileSize * 5;
