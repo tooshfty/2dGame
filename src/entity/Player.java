@@ -3,6 +3,7 @@ package entity;
 import Main.GamePanel;
 import Main.KeyHandler;
 import Main.UtilityTool;
+import Main.monster.MonsterFactory;
 import object.*;
 
 import javax.imageio.ImageIO;
@@ -605,6 +606,11 @@ public class Player extends Entity{
             }
         }
 
+    }
+    public void selectMonster(){
+
+        int made = MonsterFactory.spawnNearPlayer("Green Slime", 8, gp, 10);
+        System.out.println("Spawned " + made + " slime(s).");
     }
 
     public int searchItemInInventory(String itemName){

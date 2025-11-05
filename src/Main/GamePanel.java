@@ -1,5 +1,7 @@
 package Main;
 
+import Main.monster.MonsterFactory;
+import Main.monster.MonsterRegistry;
 import ai.PathFinder;
 import data.SaveLoad;
 import entity.Entity;
@@ -70,7 +72,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[][] npc = new Entity[maxMap][10];
     public Entity[][] monster = new Entity[maxMap][20];
     public InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
-    public Entity projectile[][] = new Entity[maxMap][20];
+    public Entity[][] projectile = new Entity[maxMap][20];
     //public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
@@ -113,6 +115,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame(){
 
+        MonsterRegistry.init();
+        MonsterFactory.init();
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
@@ -255,7 +259,14 @@ public class GamePanel extends JPanel implements Runnable{
         eManager.update();
     }
         if (gameState == pauseState){
-            // do nothing for now
+
+            if (currentMap == tileM.TESTING_MAP){
+                ui.updateSpawnMenu();
+            }
+        }
+
+        if (currentMap == 9){
+            currentArea = indoor;
         }
 
     }

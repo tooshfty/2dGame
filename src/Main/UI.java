@@ -1,5 +1,6 @@
 package Main;
 
+import Main.monster.*;
 import entity.Entity;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
@@ -10,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class UI {
 
@@ -37,7 +40,16 @@ public class UI {
     public int playerSlotRow = 0;
     public int npcSlotCol = 0;
     public int npcSlotRow = 0;
+    public int monsterSlotCol = 0;
+    public int monsterSlotRow = 0;
+    static final int SPAWN_NAVIGATE = 0;
+    static final int SPAWN_QTY = 1;
     int subState = 0;
+    int spawnSubState = SPAWN_NAVIGATE;
+    private boolean spawnQtyMode = false;
+    private int spawnQty = 1;
+    private static final int SPAWN_QTY_MIN = 1;
+    private static final int SPAWN_QTY_MAX = 5;
     int counter = 0;
     public Entity npc;
 
@@ -912,8 +924,7 @@ public class UI {
 
     }
     public int getItemIndexOnSlot(int slotCol, int slotRow) {
-        int itemIndex = slotCol + (slotRow * 5);
-        return itemIndex;
+        return slotCol + (slotRow * 5);
     }
 
 
@@ -1051,14 +1062,134 @@ public class UI {
 
     public void drawPauseScreen(){
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD,100));
-        String text = "paused";
-        int x = getXForCenteredText(text);
-        int y = gp.screenHeight/2;
+        if(gp.currentMap == gp.tileM.TESTING_MAP){
+            drawTestMonSpawner(true);
+        }else {
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 100));
+            String text = "paused";
+            int x = getXForCenteredText(text);
+            int y = gp.screenHeight / 2;
 
-        g2.drawString(text, x,y);
+            g2.drawString(text, x, y);
+        }
 
     }
+    public void drawTestMonSpawner(boolean cursor){
+
+        // 1) MAIN FRAME (unchanged)
+        int frameX = gp.tileSize * 12;
+        int frameY = gp.tileSize;
+        int frameWidth  = gp.tileSize * 6;
+        int frameHeight = gp.tileSize * 5;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        // 2) GRID DRAW (unchanged except source is MonsterRegistry + MonsterIconCache)
+        final int slotXStart = frameX + 20;
+        final int slotYStart = frameY + 20;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+        int slotSize = gp.tileSize + 3;
+
+        int count = MonsterRegistry.size();
+        for (int i = 0; i < count; i++) {
+            var meta = MonsterRegistry.get(i);
+            if (meta != null) {
+                var icon = MonsterIconCache.getIcon(gp, meta.key());
+                if (icon != null) {
+                    g2.drawImage(icon, slotX, slotY, gp.tileSize, gp.tileSize, null);
+                } else {
+                    g2.drawString(meta.displayName(), slotX + 6, slotY + gp.tileSize/2 + 6);
+                }
+            }
+            slotX += slotSize;
+            if (i == 4 || i == 9 || i == 14) { slotX = slotXStart; slotY += slotSize; }
+        }
+
+        // 3) CURSOR HIGHLIGHT (show during both substates)
+        if (cursor) {
+            int cursorX = slotXStart + (slotSize * monsterSlotCol);
+            int cursorY = slotYStart + (slotSize * monsterSlotRow);
+            g2.setColor(Color.white);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(cursorX, cursorY, gp.tileSize, gp.tileSize, 10, 10);
+        }
+
+        // 4) DESCRIPTION PANEL (your existing label.draw loop, only uses selected index)
+        int dFrameX = frameX;
+        int dFrameY = frameY + frameHeight;
+        int dFrameWidth  = frameWidth;
+        int dFrameHeight = gp.tileSize * 3;
+        int textX = dFrameX + 20;
+        int textY = dFrameY + gp.tileSize;
+        int selIndex = getItemIndexOnSlot(monsterSlotCol, monsterSlotRow);
+        if (selIndex >= 0 && selIndex < MonsterRegistry.size()) {
+            drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
+            g2.setFont(g2.getFont().deriveFont(28F));
+            String label = MonsterRegistry.getDisplayNameAt(selIndex);
+            if (label == null) label = "(unknown)";
+            for (String line : label.split("\n")) {
+                g2.drawString(line, textX, textY);
+                textY += 32;
+            }
+        }
+
+        // 5) QTY OVERLAY (ONLY when sub-state is QTY)
+        if (spawnSubState == SPAWN_QTY) {
+            int qFrameW = gp.tileSize * 3;
+            int qFrameH = gp.tileSize * 2;
+            int qFrameX = frameX + (frameWidth - qFrameW)/2;
+            int qFrameY = frameY + gp.tileSize; // slight drop
+            drawSubWindow(qFrameX, qFrameY, qFrameW, qFrameH);
+
+            int tx = qFrameX + 16;
+            int ty = qFrameY + gp.tileSize/2 + 10;
+            g2.setFont(g2.getFont().deriveFont(24F));
+            g2.drawString("Quantity:", tx, ty);
+            g2.setFont(g2.getFont().deriveFont(28F));
+            g2.drawString(String.valueOf(spawnQty), tx + gp.tileSize * 2, ty);
+
+            g2.setFont(g2.getFont().deriveFont(14F));
+            g2.drawString("←/→ adjust, Enter confirm, Esc cancel", tx, ty + 24);
+        }
+    }
+    public void updateSpawnMenu() {
+        // Debounce-friendly: consume keys you use
+        if (spawnSubState == SPAWN_NAVIGATE) {
+            // Cursor movement works as you already have (Up/Down/Left/Right) — leave that code where it is.
+            // Here, only handle the Enter transition into QTY mode:
+            if (gp.keyH.enterPressed) {
+                int idx = getItemIndexOnSlot(monsterSlotCol, monsterSlotRow);
+                if (idx >= 0 && idx < MonsterRegistry.size()) {
+                    spawnQty = 1;
+                    spawnSubState = SPAWN_QTY;
+                }
+                gp.keyH.enterPressed = false;
+            }
+        } else if (spawnSubState == SPAWN_QTY) {
+
+            // In QTY mode: lock cursor; Left/Right adjust quantity; Enter confirms; Esc cancels
+            if (gp.keyH.leftPressed)  { spawnQty = Math.max(SPAWN_QTY_MIN, spawnQty - 1); gp.keyH.leftPressed = false; }
+            if (gp.keyH.rightPressed) { spawnQty = Math.min(SPAWN_QTY_MAX, spawnQty + 1); gp.keyH.rightPressed = false; }
+
+            if (gp.keyH.enterPressed) {
+                int idx = getItemIndexOnSlot(monsterSlotCol, monsterSlotRow);
+                String key = MonsterRegistry.getKeyAt(idx);
+                if (key != null) {
+                    int spawned = MonsterFactory.spawnNearPlayer(key, spawnQty, gp, /*cap*/ 5);
+                    // Optional: toast/message
+                    System.out.println("Spawned " + spawned + " x " + key);
+                }
+                gp.keyH.enterPressed = false;
+                spawnSubState = SPAWN_NAVIGATE;
+            }
+            // If you have a back/cancel key in KeyHandler, use it here:
+            if (gp.keyH.escapePressed) {
+                spawnSubState = SPAWN_NAVIGATE;
+                gp.keyH.escapePressed = false;
+            }
+        }
+    }
+
     public void drawPlayerLife(){
 
 

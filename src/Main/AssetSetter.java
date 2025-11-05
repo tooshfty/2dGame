@@ -11,12 +11,23 @@ import tile_interactive.IT_Destructible_Wall;
 import tile_interactive.IT_Dry_Tree;
 import tile_interactive.IT_Metal_Plate;
 
+import java.util.ArrayList;
+
 public class AssetSetter {
 
     GamePanel gp;
+    ArrayList<Entity> monsterList = new ArrayList<>();
 
     public AssetSetter(GamePanel gp){
         this.gp = gp;
+
+        //this is not guaranteed to work, it might cause problems down the line, granted we are not explicitly
+        monsterList.add(new MON_Bat(gp));
+        monsterList.add(new MON_GreenSlime(gp));
+        monsterList.add(new MON_Orc(gp));
+        monsterList.add(new MON_RedSlime(gp));
+        // need to change skel lords scale for the inventory
+        monsterList.add(new MON_Skeleton_Lord(gp));
     }
 
     public void setObject(){

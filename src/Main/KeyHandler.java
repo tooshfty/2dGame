@@ -1,11 +1,14 @@
 package Main;
 
+import Main.monster.MonsterFactory;
+import tile.TileManager;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed, pausePressed, escapePressed;
     GamePanel gp;
     //Debug
     boolean showDebugText = false;
@@ -86,7 +89,9 @@ public class KeyHandler implements KeyListener {
                 case 3:
                     gp.tileM.loadMap("/maps/dungeon02.txt",3);
                     break;
-
+                case 9:
+                    gp.tileM.loadMap("/maps/training.txt", TileManager.TESTING_MAP);
+                    break;
             }
         }
     }
@@ -112,12 +117,20 @@ public class KeyHandler implements KeyListener {
             }
         }
         if (gp.ui.subState == 1){
+            if (escapePressed){
+                gp.ui.subState--;
+                escapePressed = false;
+            }
             npcInventory(code);
             if (code == KeyEvent.VK_ESCAPE){
                 gp.ui.subState = 0;
             }
         }
         if (gp.ui.subState == 2){
+            if (escapePressed){
+                gp.ui.subState--;
+                escapePressed = false;
+            }
             playerInventory(code);
             if (code == KeyEvent.VK_ESCAPE){
                 gp.ui.subState = 0;
@@ -149,7 +162,6 @@ public class KeyHandler implements KeyListener {
                 gp.ui.commandNum = 0;
             }
         }
-
 
     }
 
@@ -243,8 +255,7 @@ public class KeyHandler implements KeyListener {
                         gp.playSE(1);
                         break;
                     case 2:
-                        System.out.println("test");
-                        gp.currentMap = 9;
+                        gp.currentMap = gp.tileM.TESTING_MAP;
                         gp.gameState = gp.playState;
                         break;
                     case 3:
@@ -265,6 +276,10 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.commandNum > 3){
                     gp.ui.commandNum = 0;
                 }
+            }
+            if (code == KeyEvent.VK_ESCAPE){
+                gp.ui.titleScreenState = 0;
+                escapePressed = true;
             }
 
             if (code == KeyEvent.VK_ENTER) {
@@ -305,7 +320,6 @@ public class KeyHandler implements KeyListener {
         }
         if (code==KeyEvent.VK_P){
             gp.gameState = gp.pauseState;
-            System.out.println("pause pressed");
         }
         if (code == KeyEvent.VK_ENTER){
             enterPressed = true;
@@ -341,8 +355,28 @@ public class KeyHandler implements KeyListener {
     public void pauseState(int code){
 
         if (code == KeyEvent.VK_P){
-
             gp.gameState = gp.playState;
+        }
+
+        if (gp.currentMap == gp.tileM.TESTING_MAP) {
+            if (gp.ui.spawnSubState == gp.ui.SPAWN_NAVIGATE){
+                monsterInventory(code);
+            } else if (gp.ui.spawnSubState == gp.ui.SPAWN_QTY){
+                if (code == KeyEvent.VK_ENTER) {
+                    enterPressed = true;
+                }
+                if (code == KeyEvent.VK_LEFT) {
+                    leftPressed = true;
+                }
+                if (code == KeyEvent.VK_RIGHT) {
+                    rightPressed = true;
+                }
+                if (code == KeyEvent.VK_ESCAPE) {
+                    escapePressed = true; // if you have this
+                }
+            }
+
+            return;
         }
     }
     public void dialogueState(int code){
@@ -360,7 +394,6 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER) {
             gp.player.selectItem();
         }
-
         playerInventory(code);
     }
 
@@ -368,6 +401,32 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_M){
             gp.gameState = gp.playState;
+        }
+    }
+    public void monsterInventory(int code){
+        if (code == KeyEvent.VK_W) {
+            if (gp.ui.monsterSlotRow != 0) {
+                gp.ui.monsterSlotRow--;
+                gp.playSE(9);
+            }
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gp.ui.monsterSlotCol != 0){
+                gp.ui.monsterSlotCol--;
+                gp.playSE(9);
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gp.ui.monsterSlotRow != 3){
+                gp.ui.monsterSlotRow++;
+                gp.playSE(9);
+            }
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gp.ui.monsterSlotCol != 4){
+                gp.ui.monsterSlotCol++;
+                gp.playSE(9);
+            }
         }
     }
     public void playerInventory(int code) {
@@ -448,6 +507,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ENTER){
             enterPressed = false;
+        }
+        if (code == KeyEvent.VK_ESCAPE){
+            escapePressed = false;
         }
     }
 }

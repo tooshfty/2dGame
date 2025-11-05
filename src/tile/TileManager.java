@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class TileManager {
 
+    public static final int TESTING_MAP = 9;
+
     GamePanel gp;
     public Tile[] tile;
     public int mapTileNum[][][]; // LAYERS: map num ,
@@ -66,7 +68,7 @@ public class TileManager {
         loadMap("/maps/indoor01.txt",1);
         loadMap("/maps/dungeon01.txt",2);
         loadMap("/maps/dungeon02.txt",3);
-        loadMap("/maps/training.txt",9);
+        loadMap("/maps/training.txt",TESTING_MAP);
 
     }
 
