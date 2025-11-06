@@ -18,6 +18,8 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
+    private int lastFaceX = 0;   // -1 left, 0 none, +1 right
+    private int lastFaceY = 1;   // -1 up,  0 none, +1 down (default facing down)
     int standCounter = 0;
     public boolean attackCancel = false;
     public boolean lightUpdated = false;
@@ -60,7 +62,7 @@ public class Player extends Entity{
         gp.currentMap = 0;
         worldX = gp.tileSize * 25;
         worldY = gp.tileSize * 25;
-        defaultSpeed = 4;
+        defaultSpeed = 3;
         speed = defaultSpeed;
         direction = "down";
 
@@ -103,6 +105,10 @@ public class Player extends Entity{
         inventory.add(new OBJ_Lantern(gp));
         inventory.add(new OBJ_Pickaxe(gp));
 
+    }
+
+    public void setDialogue(){
+        dialogues[0][0] = "You are level " + level + " now\n";
     }
 
     public int getAttack(){
@@ -288,15 +294,27 @@ public class Player extends Entity{
         else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed
          || keyH.enterPressed) {
 
-            if (keyH.upPressed) {
-                direction = "up";
-            } else if (keyH.downPressed) {
-                direction = "down";
-            } else if (keyH.leftPressed) {
-                direction = "left";
-            } else if (keyH.rightPressed) {
-                direction = "right";
+            // 1) Keys → movement vector (-1, 0, +1)
+            int mx = 0;
+            int my = 0;
+            if (keyH.upPressed)    my -= 1;
+            if (keyH.downPressed)  my += 1;
+            if (keyH.leftPressed)  mx -= 1;
+            if (keyH.rightPressed) mx += 1;
+
+            // 2) Normalize diagonal speed (avoid √2 boost)
+            int step = speed;
+            if (mx != 0 && my != 0) {
+                step = (int)Math.round(speed / Math.sqrt(2.0));
             }
+
+            // 3) Axis-resolved movement using your existing collision checks
+            tryMoveX(mx * step);   // sets direction temporarily to left/right inside
+            tryMoveY(my * step);   // sets direction temporarily to up/down inside
+
+            // 4) Facing for sprites/attacks (keep 4-way for now)
+            direction = pickFacing(mx, my);
+
             spriteCounter++;
 
             //Check Tile Collision
@@ -353,14 +371,7 @@ public class Player extends Entity{
             guarding = false;
             guardCounter = 0;
 
-            if (spriteCounter > 12) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 1;
-                }
-                spriteCounter = 0;
-            }
+            if (spriteCounter > 12) { spriteNum = (spriteNum == 1 ? 2 : 1); spriteCounter = 0; }
 
         }else {
             standCounter++;
@@ -484,6 +495,49 @@ public class Player extends Entity{
         }
     }
 
+    // Helper: decide which cardinal direction to face based on movement vector
+    private String pickFacing(int mx, int my) {
+        // Prefer the dominant axis; tie-breaker = last facing
+        if (Math.abs(mx) > Math.abs(my)) {
+            lastFaceX = mx;
+            return (mx > 0) ? "right" : "left";
+        } else if (Math.abs(my) > 0) {
+            lastFaceY = my;
+            return (my > 0) ? "down" : "up";
+        } else {
+            // No movement; keep the last cardinal
+            if (lastFaceY != 0) return (lastFaceY > 0) ? "down" : "up";
+            if (lastFaceX != 0) return (lastFaceX > 0) ? "right" : "left";
+            return "down";
+        }
+    }
+
+    // Axis-resolved movement using your CollisionChecker
+    private void tryMoveX(int dx) {
+        if (dx == 0) return;
+        // Temporarily set direction to reuse your existing collision tests if they branch by direction
+        String oldDir = direction;
+        direction = (dx > 0) ? "right" : "left";
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+        if (!collisionOn) {
+            worldX += dx;
+        }
+        direction = oldDir;
+    }
+
+    private void tryMoveY(int dy) {
+        if (dy == 0) return;
+        String oldDir = direction;
+        direction = (dy > 0) ? "down" : "up";
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+        if (!collisionOn) {
+            worldY += dy;
+        }
+        direction = oldDir;
+    }
+
     public void damageProjectile(int i) {
 
         if (i != 999) {
@@ -562,9 +616,7 @@ public class Player extends Entity{
             startDialogue(this,0);
         }
     }
-    public void setDialogue(){
-        dialogues[0][0] = "You are level " + level + " now\n";
-    }
+
 
     public void selectItem() {
 
@@ -606,11 +658,6 @@ public class Player extends Entity{
             }
         }
 
-    }
-    public void selectMonster(){
-
-        int made = MonsterFactory.spawnNearPlayer("Green Slime", 8, gp, 10);
-        System.out.println("Spawned " + made + " slime(s).");
     }
 
     public int searchItemInInventory(String itemName){

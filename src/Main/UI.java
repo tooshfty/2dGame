@@ -48,7 +48,7 @@ public class UI {
     int spawnSubState = SPAWN_NAVIGATE;
     private int spawnQty = 1;
     private static final int SPAWN_QTY_MIN = 1;
-    private static final int SPAWN_QTY_MAX = 5;
+    private static final int SPAWN_QTY_MAX = 10;
     int counter = 0;
     public Entity npc;
 
