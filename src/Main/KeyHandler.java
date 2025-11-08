@@ -397,9 +397,7 @@ public class KeyHandler implements KeyListener {
             gp.gameState = gp.playState;
         }
 
-        if (code == KeyEvent.VK_ENTER) {
-            gp.player.selectItem();
-        }
+
         playerInventory(code);
     }
 
@@ -459,6 +457,10 @@ public class KeyHandler implements KeyListener {
                 gp.ui.playerSlotCol++;
                 gp.playSE(9);
             }
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            gp.player.selectItem();
+            enterPressed = false;
         }
     }
     public void npcInventory(int code) {

@@ -1,6 +1,7 @@
 package Main;
 
 import Main.monster.MonsterFactory;
+import Main.monster.MonsterIconCache;
 import Main.monster.MonsterRegistry;
 import ai.PathFinder;
 import data.SaveLoad;
@@ -131,6 +132,13 @@ public class GamePanel extends JPanel implements Runnable{
         if (fullScreenOn){
         setFullScreen();
         }
+
+
+        //testing
+        combat.Weapon axe = new combat.BattleAxe(this);
+        java.awt.image.BufferedImage axeIcon = MonsterIconCache.getIcon(this, "Orc"); // placeholder icon reuse
+        inventory.WeaponItem axeItem = new inventory.WeaponItem("Battle Axe", axeIcon, axe);
+        player.inventoryN.add(axeItem);
 
     }
 

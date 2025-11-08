@@ -4,6 +4,7 @@ import Main.GamePanel;
 import Main.KeyHandler;
 import Main.UtilityTool;
 import Main.monster.MonsterFactory;
+import inventory.InventoryItem;
 import object.*;
 
 import javax.imageio.ImageIO;
@@ -432,7 +433,15 @@ public class Player extends Entity{
         }
     }
 
-
+    public boolean equipSelectedWeapon(int index) {
+        if (index < 0 || index >= inventoryN.size()) return false;
+        InventoryItem it = inventoryN.get(index);
+        if (it instanceof inventory.WeaponItem w) {
+            this.weapon = w.weapon();
+            return true;
+        }
+        return false;
+    }
 
     public void pickUpObject(int i){
 
@@ -620,43 +629,54 @@ public class Player extends Entity{
 
     public void selectItem() {
 
-        int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol,gp.ui.playerSlotRow);
-
-        if (itemIndex < inventory.size()) {
-
-            Entity selectedItem = inventory.get(itemIndex);
-
-            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe) {
-
-                currentWeapon = selectedItem;
-                attack = getAttack();
-                getPlayerAttackImage();
-            }
-            if (selectedItem.type == type_shield) {
-
-                currentShield = selectedItem;
-                defense = getDefense();
-            }
-            if (selectedItem.type == type_consumable) {
-                if (selectedItem.use(this)){
-                    if (selectedItem.amount > 1){
-                        selectedItem.amount --;
-                    }else {
-                        inventory.remove(itemIndex);
-                    }
+            int idx = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
+            if (idx >= 0 && idx < gp.player.inventoryN.size()) {
+                boolean equipped = gp.player.equipSelectedWeapon(idx);
+                if (equipped) {
+                    // optional: toast / message
+                    System.out.println("Equipped: " + gp.player.inventoryN.get(idx).name());
                 }
-                //decide what to do with consumables, condition check that you can use the consumable
             }
-            if (selectedItem.type == type_light){
-                if (currentLight == selectedItem){
-                    currentLight = null;
-                }
-                else {
-                    currentLight = selectedItem;
-                }
-                lightUpdated = true;
-            }
-        }
+
+
+
+        //int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol,gp.ui.playerSlotRow);
+
+//        if (itemIndex < inventory.size()) {
+//
+//            Entity selectedItem = inventory.get(itemIndex);
+//
+//            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe) {
+//
+//                currentWeapon = selectedItem;
+//                attack = getAttack();
+//                getPlayerAttackImage();
+//            }
+//            if (selectedItem.type == type_shield) {
+//
+//                currentShield = selectedItem;
+//                defense = getDefense();
+//            }
+//            if (selectedItem.type == type_consumable) {
+//                if (selectedItem.use(this)){
+//                    if (selectedItem.amount > 1){
+//                        selectedItem.amount --;
+//                    }else {
+//                        inventory.remove(itemIndex);
+//                    }
+//                }
+//                //decide what to do with consumables, condition check that you can use the consumable
+//            }
+//            if (selectedItem.type == type_light){
+//                if (currentLight == selectedItem){
+//                    currentLight = null;
+//                }
+//                else {
+//                    currentLight = selectedItem;
+//                }
+//                lightUpdated = true;
+//            }
+//        }
 
     }
 

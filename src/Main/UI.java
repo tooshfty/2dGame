@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import inventory.InventoryItem;
 
 public class UI {
 
@@ -837,6 +838,8 @@ public class UI {
     }
     public void drawInventory(Entity entity, boolean cursor){
 
+        java.util.List<inventory.InventoryItem> items = gp.player.inventoryN;
+
         int frameX = 0;
         int frameY = 0;
         int frameWidth = 0;
@@ -891,53 +894,84 @@ public class UI {
             int textY = dFrameY + gp.tileSize;
             g2.setFont(g2.getFont().deriveFont(28F));
 
-            int itemIndex = getItemIndexOnSlot(slotCol,slotRow);
-            if (itemIndex < entity.inventory.size()) {
-
-                drawSubWindow(dFrameX,dFrameY, dFrameWidth,dFrameHeight);
-
-                for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
+            int selIndex = getItemIndexOnSlot(slotCol, slotRow);
+            if (selIndex >= 0 && selIndex < items.size()) {
+                drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
+                g2.setFont(g2.getFont().deriveFont(28F));
+                String label = items.get(selIndex).name();
+                for (String line : label.split("\n")) {
                     g2.drawString(line, textX, textY);
                     textY += 32;
                 }
-
             }
+//            int itemIndex = getItemIndexOnSlot(slotCol,slotRow);
+//            if (itemIndex < entity.inventory.size()) {
+//
+//                drawSubWindow(dFrameX,dFrameY, dFrameWidth,dFrameHeight);
+//
+//                for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
+//                    g2.drawString(line, textX, textY);
+//                    textY += 32;
+//                }
+//
+//            }
         }
 
-        //draw items
-        for (int i = 0; i < entity.inventory.size(); i++){
+        //testing
+        for (int i = 0; i < items.size(); i++) {
+            inventory.InventoryItem it = items.get(i);
 
-            //draw cursor
-            if (entity.inventory.get(i) == entity.currentWeapon || entity.inventory.get(i)== entity.currentShield ||
-                    entity.inventory.get(i) == entity.currentLight) {
-                g2.setColor(new Color(240,190,90));
-                g2.fillRoundRect(slotX,slotY,gp.tileSize,gp.tileSize, 10, 10);
-            }
-            g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
-
-            //display amount
-            if (entity == gp.player && entity.inventory.get(i).amount > 1) {
-
-                g2.setFont(g2.getFont().deriveFont(32f));
-                int amountX;
-                int amountY;
-                String s = "" + entity.inventory.get(i).amount;
-                amountX = getXForAlignToRightText(s,slotX + 44);
-                amountY = slotY + gp.tileSize;
-                //shadow
-                g2.setColor(new Color(60,60,60));
-                g2.drawString(s,amountX,amountY);
-                //number
-                g2.setColor(Color.white);
-                g2.drawString(s,amountX-3,amountY-3);
+            // draw icon if present
+            if (it.icon() != null) {
+                g2.drawImage(it.icon(), slotX, slotY, gp.tileSize, gp.tileSize, null);
+            } else {
+                // fallback: draw text label centered-ish
+                g2.drawString(it.name(), slotX + 6, slotY + gp.tileSize / 2 + 6);
             }
 
+            // advance grid (keep your existing 5-per-row logic)
             slotX += slotSize;
-            if (i == 4 || i == 9 || i == 14){
+            if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXStart;
                 slotY += slotSize;
             }
         }
+
+
+        //draw items
+//        for (int i = 0; i < entity.inventory.size(); i++){
+//
+//            //draw cursor
+//            if (entity.inventory.get(i) == entity.currentWeapon || entity.inventory.get(i)== entity.currentShield ||
+//                    entity.inventory.get(i) == entity.currentLight) {
+//                g2.setColor(new Color(240,190,90));
+//                g2.fillRoundRect(slotX,slotY,gp.tileSize,gp.tileSize, 10, 10);
+//            }
+//            g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
+//
+//            //display amount
+//            if (entity == gp.player && entity.inventory.get(i).amount > 1) {
+//
+//                g2.setFont(g2.getFont().deriveFont(32f));
+//                int amountX;
+//                int amountY;
+//                String s = "" + entity.inventory.get(i).amount;
+//                amountX = getXForAlignToRightText(s,slotX + 44);
+//                amountY = slotY + gp.tileSize;
+//                //shadow
+//                g2.setColor(new Color(60,60,60));
+//                g2.drawString(s,amountX,amountY);
+//                //number
+//                g2.setColor(Color.white);
+//                g2.drawString(s,amountX-3,amountY-3);
+//            }
+//
+//            slotX += slotSize;
+//            if (i == 4 || i == 9 || i == 14){
+//                slotX = slotXStart;
+//                slotY += slotSize;
+//            }
+//        }
 
 
     }

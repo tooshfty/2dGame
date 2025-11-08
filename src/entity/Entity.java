@@ -2,11 +2,15 @@ package entity;
 
 import Main.GamePanel;
 import Main.UtilityTool;
+import combat.BattleAxe;
+import combat.Weapon;
+import inventory.InventoryItem;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -63,10 +67,12 @@ public class Entity {
     public int defaultSpeed;
 
     // Equipment & Inventory
+    public Weapon weapon;
     public Entity currentWeapon;
     public Entity currentShield;
     public Projectile projectile;
     public Entity currentLight;
+    public java.util.List<inventory.InventoryItem> inventoryN = new java.util.ArrayList<>();
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 20;
     public boolean stackable = false;
