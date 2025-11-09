@@ -285,9 +285,11 @@ public class Player extends Entity{
                 speed = defaultSpeed;
             }
         }
-        else if (attacking) {
-            attacking();
-
+        else if (keyH.enterPressed) {
+            if (weapon != null && weapon.ready()) {
+                weapon.startAttack(this);
+            }
+            keyH.enterPressed = false; // important: prevents restarting every frame while held
         } else if (keyH.spacePressed) {
             guarding = true;
             guardCounter++;
@@ -361,11 +363,12 @@ public class Player extends Entity{
                 }
             }
 
-            if (keyH.enterPressed && !attackCancel){
-                gp.playSE(7);
-                attacking = true;
-                spriteCounter = 0;
-            }
+
+//            if (keyH.enterPressed && !attackCancel){
+//                gp.playSE(7);
+//                attacking = true;
+//                spriteCounter = 0;
+//            }
 
             attackCancel = false;
             gp.keyH.enterPressed = false;
@@ -430,6 +433,10 @@ public class Player extends Entity{
                 gp.playSE(12);
                 gp.gameState = gp.gameOverState;
             }
+        }
+        // Advance weapon state each frame
+        if (weapon != null) {
+            weapon.updateAttack(this);
         }
     }
 
@@ -637,47 +644,6 @@ public class Player extends Entity{
                     System.out.println("Equipped: " + gp.player.inventoryN.get(idx).name());
                 }
             }
-
-
-
-        //int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol,gp.ui.playerSlotRow);
-
-//        if (itemIndex < inventory.size()) {
-//
-//            Entity selectedItem = inventory.get(itemIndex);
-//
-//            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe) {
-//
-//                currentWeapon = selectedItem;
-//                attack = getAttack();
-//                getPlayerAttackImage();
-//            }
-//            if (selectedItem.type == type_shield) {
-//
-//                currentShield = selectedItem;
-//                defense = getDefense();
-//            }
-//            if (selectedItem.type == type_consumable) {
-//                if (selectedItem.use(this)){
-//                    if (selectedItem.amount > 1){
-//                        selectedItem.amount --;
-//                    }else {
-//                        inventory.remove(itemIndex);
-//                    }
-//                }
-//                //decide what to do with consumables, condition check that you can use the consumable
-//            }
-//            if (selectedItem.type == type_light){
-//                if (currentLight == selectedItem){
-//                    currentLight = null;
-//                }
-//                else {
-//                    currentLight = selectedItem;
-//                }
-//                lightUpdated = true;
-//            }
-//        }
-
     }
 
     public int searchItemInInventory(String itemName){

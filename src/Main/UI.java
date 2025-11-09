@@ -53,6 +53,9 @@ public class UI {
     int counter = 0;
     public Entity npc;
 
+    //debug
+    private boolean showCombatDebug = true;
+
 
 
     public UI(GamePanel gp){
@@ -169,6 +172,37 @@ public class UI {
         if (gp.gameState == gp.sleepState){
             drawSleepScreen();
         }
+        drawWeaponHitboxes();
+    }
+    public void drawWeaponHitboxes() {
+        if (!showCombatDebug) return;
+        if (gp == null || gp.player == null) return;
+        if (gp.player.weapon == null) return;
+
+        // Ask the weapon for this frame's hitboxes
+        java.util.List<combat.Hitbox> boxes = gp.player.weapon.getCurrentHitboxes(gp.player);
+        if (boxes == null || boxes.isEmpty()) return;
+
+        // Convert world-space rects to screen-space using the same camera math used for entities
+        // Assumption: player.screenX/screenY are the on-screen anchor positions.
+        int cameraWorldX = gp.player.worldX - gp.player.screenX;
+        int cameraWorldY = gp.player.worldY - gp.player.screenY;
+
+        java.awt.Stroke oldStroke = g2.getStroke();
+        java.awt.Color oldColor = g2.getColor();
+
+        g2.setColor(new java.awt.Color(255, 80, 80, 200));    // red-ish outline
+        g2.setStroke(new java.awt.BasicStroke(2f));
+
+        for (combat.Hitbox hb : boxes) {
+            java.awt.Rectangle r = hb.bounds;
+            int sx = r.x - cameraWorldX;
+            int sy = r.y - cameraWorldY;
+            g2.drawRect(sx, sy, r.width, r.height);
+        }
+
+        g2.setStroke(oldStroke);
+        g2.setColor(oldColor);
     }
 
     public void drawSleepScreen() {
@@ -1366,4 +1400,6 @@ public class UI {
         int x = tailX - length;
         return x;
     }
+
+
 }

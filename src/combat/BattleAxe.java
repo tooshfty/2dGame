@@ -93,6 +93,7 @@ public class BattleAxe extends AxeBase {
     }
 
     // Optionally add a method for “already hit” tracking by entity id
+    // Probably need to add hit ids for each monster
     public boolean registerHit(int targetId) {
         if (hitIds.contains(targetId)) return false;
         hitIds.add(targetId);
